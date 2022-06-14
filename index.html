@@ -145,6 +145,82 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://oushaohua.github.io/2022/06/15/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaoou">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaoou">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/06/15/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/" class="post-title-link" itemprop="url">单元测试</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-06-15 00:02:16 / 修改时间：00:12:56" itemprop="dateCreated datePublished" datetime="2022-06-15T00:02:16+08:00">2022-06-15</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="单元测试的基本概念"><a href="#单元测试的基本概念" class="headerlink" title="单元测试的基本概念"></a>单元测试的基本概念</h2><p>这里所说的单元简单来说就是指一个实现完整功能的函数，使用函数对代码进行封装。单元测试就是指用一组特定的输入(测试用例)来测试函数的功能是否正常，并且返回了正确的输出。</p>
+<h3 id="单元测试的覆盖种类"><a href="#单元测试的覆盖种类" class="headerlink" title="单元测试的覆盖种类"></a>单元测试的覆盖种类</h3><p>1）语句覆盖：语句覆盖就是设计若干个测试用例，运行被测试程序，使得每一条可执行语句至少执行一次。</p>
+<p>2）判定覆盖（也叫分支覆盖）：设计若干个测试用例，运行所测程序，使程序中每个判断的取真分支和取假分支至少执行一次。</p>
+<p>3）条件覆盖：设计足够的测试用例，运行所测程序，使程序中每个判断的每个条件的每个可能取值至少执行一次。</p>
+<p>4）判定、条件覆盖：设计足够的测试用例，运行所测程序，使程序中每个判断的每个条件的每个可能取值至少执行一次，并且每个可能的判断结果也至少执行一次。</p>
+<p>5）条件组合测试：设计足够的测试用例，运行所测程序，使程序中每个判断的所有条件取值组合至少执行一次。</p>
+<p>6）路径测试：设计足够的测试用例，运行所测程序，要覆盖程序中所有可能的路径。</p>
+<p>用例的设计方案主要的有下面几种：条件测试，基本路径测试，循环测试。通过上面的方法可以实现测试用例对程序的逻辑覆盖和路径覆盖。</p>
+<p>对于单元测试这里要先说明一下，无论你设计多少测试用例，无论你的测试方案多么完美，都不可能完全100%的发现所有BUG，我们所需要做的是用最少的资源，做最多测试检查，寻找一个平衡点保证程序的正确性。穷举测试是不可能的。所以现在进行单元测试通常选择一般常用的比较多的基本路径测试法。<br>7）修正判定条件覆盖（MC&#x2F;DC）</p>
+<ul>
+<li>条件表示不含有布尔操作符号的布尔表达式；</li>
+<li>判定表示由条件和零或者很多布尔操作符号所组成的一个布尔表达式；</li>
+<li>修正条件判定覆盖要求在一个程序中每一种输入输出至少得出现一次，在程序中的每一个条件必须产生所有可能的输出结果至少一次，并且每一个判定中的每一个条件必须能够独立影响一个判定的输出，即在其他条件不变的前提下仅改变这个条件的值，而使判定结果改变。</li>
+</ul>
+<p>上面的定义有点不好理解，解释一下：  </p>
+<ul>
+<li>MC&#x2F;DC首先要求实现条件覆盖、判定覆盖，在此基础上，对于每一个条件C，要求存-在符合以下条件的两次计算：<br>  1）条件C所在判定内的所有条件，除条件C外，其他条件的取值完全相同；<br>  2）条件C的取值相反；<br>  3）判定的计算结果相反。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://oushaohua.github.io/2022/06/14/%E4%BB%A3%E7%A0%81%E5%AE%A1%E6%9F%A5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -170,7 +246,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-06-14 23:09:51 / 修改时间：23:48:10" itemprop="dateCreated datePublished" datetime="2022-06-14T23:09:51+08:00">2022-06-14</time>
+              <time title="创建时间：2022-06-14 23:09:51 / 修改时间：23:49:38" itemprop="dateCreated datePublished" datetime="2022-06-14T23:09:51+08:00">2022-06-14</time>
             </span>
 
           
@@ -280,7 +356,8 @@
 <li>通常开发者在送出CL后，在等待review过程中便已经开始着手基于该CL的新工作。此时如果正在review的CL存在重大设计问题的话，开发者将不得不重新写所有基于它的后续所有CL。因此你要在他们有问题的设计上投入之前阻止他们。</li>
 <li>主要设计变更通常需要较长时间才能完成，但每个开发人员几乎都有自己deadline。为了赶上deadline并保证代码质量，开发者需要尽快开始或重做CL 任何的主要设计变更。</li>
 </ul>
-<p><strong>步骤3: 用合理的顺序看CL 其余的改动</strong><br>一旦确认整个CL没有重大的设计问题时，试着找出一个有逻辑顺序来review剩余档案，并确保不会错过其中任何一个。通常在浏览主要部分后，最简单的方式是按照cr工具提供的顺序来浏览每个文件。有时在阅读主要代码前先阅读测试也是非常有帮助的，如此一来你就可以了解应该做、看些什么。<br><strong>为什么review速度要快</strong><br>在Google我们优化开发团队共同生产产品的速度，而不是优化个人开发的速度。个人的开发速度很重要，但它不如整个团队的开发速度重要。当cr很慢时，会发生以下几件事：</p>
+<p><strong>步骤3: 用合理的顺序看CL 其余的改动</strong><br>一旦确认整个CL没有重大的设计问题时，试着找出一个有逻辑顺序来review剩余档案，并确保不会错过其中任何一个。通常在浏览主要部分后，最简单的方式是按照cr工具提供的顺序来浏览每个文件。有时在阅读主要代码前先阅读测试也是非常有帮助的，如此一来你就可以了解应该做、看些什么。<br><strong>为什么review速度要快</strong>  </p>
+<p>在Google我们优化开发团队共同生产产品的速度，而不是优化个人开发的速度。个人的开发速度很重要，但它不如整个团队的开发速度重要。当cr很慢时，会发生以下几件事：</p>
 <ul>
 <li>团队整体的速度下降。review慢的话，对于团队其他人来说重要的新功能与缺陷修复将会被延迟数天、数周甚至数月，只因为它们正在或者等待review。</li>
 <li>开发人员开始抗议cr。若reviewer每隔几天才回应一次，但每次都要求对CL进行重大更改的话，那么开发人员可能会感到非常沮丧与觉得困难，而这通常会演变成抱怨。如果reviewer请求相同的实质性更改(且确实可以改善代码质量状况)，但在每次开发人员提交新的改动时都能快速反应的话，这些抱怨往往会消失。<strong>大多数关于cr的抱怨，往往可以通过加快流程来解决。</strong></li>
@@ -1244,7 +1321,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

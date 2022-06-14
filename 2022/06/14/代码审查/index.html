@@ -28,7 +28,7 @@
 <meta property="og:description" content="代码审查指南 cr: code review cl: change list，指这次改动 reviewer: cr的那个review人 nit: 全称nitpick，意思是鸡蛋里挑骨头 作者: 也就是本次CL的开发者，原文中是以author来称开发者的。代码审查是除了代码作者之外，其他人检查代码的过程。通过Code Review来维护代码和产品质量。  代码审查者应该关注哪些方面  设计：代码是否">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-06-14T15:09:51.000Z">
-<meta property="article:modified_time" content="2022-06-14T15:48:10.000Z">
+<meta property="article:modified_time" content="2022-06-14T15:49:38.000Z">
 <meta property="article:author" content="xiaoou">
 <meta name="twitter:card" content="summary">
 
@@ -174,7 +174,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-06-14 23:09:51 / 修改时间：23:48:10" itemprop="dateCreated datePublished" datetime="2022-06-14T23:09:51+08:00">2022-06-14</time>
+              <time title="创建时间：2022-06-14 23:09:51 / 修改时间：23:49:38" itemprop="dateCreated datePublished" datetime="2022-06-14T23:09:51+08:00">2022-06-14</time>
             </span>
 
           
@@ -284,7 +284,8 @@
 <li>通常开发者在送出CL后，在等待review过程中便已经开始着手基于该CL的新工作。此时如果正在review的CL存在重大设计问题的话，开发者将不得不重新写所有基于它的后续所有CL。因此你要在他们有问题的设计上投入之前阻止他们。</li>
 <li>主要设计变更通常需要较长时间才能完成，但每个开发人员几乎都有自己deadline。为了赶上deadline并保证代码质量，开发者需要尽快开始或重做CL 任何的主要设计变更。</li>
 </ul>
-<p><strong>步骤3: 用合理的顺序看CL 其余的改动</strong><br>一旦确认整个CL没有重大的设计问题时，试着找出一个有逻辑顺序来review剩余档案，并确保不会错过其中任何一个。通常在浏览主要部分后，最简单的方式是按照cr工具提供的顺序来浏览每个文件。有时在阅读主要代码前先阅读测试也是非常有帮助的，如此一来你就可以了解应该做、看些什么。<br><strong>为什么review速度要快</strong><br>在Google我们优化开发团队共同生产产品的速度，而不是优化个人开发的速度。个人的开发速度很重要，但它不如整个团队的开发速度重要。当cr很慢时，会发生以下几件事：</p>
+<p><strong>步骤3: 用合理的顺序看CL 其余的改动</strong><br>一旦确认整个CL没有重大的设计问题时，试着找出一个有逻辑顺序来review剩余档案，并确保不会错过其中任何一个。通常在浏览主要部分后，最简单的方式是按照cr工具提供的顺序来浏览每个文件。有时在阅读主要代码前先阅读测试也是非常有帮助的，如此一来你就可以了解应该做、看些什么。<br><strong>为什么review速度要快</strong>  </p>
+<p>在Google我们优化开发团队共同生产产品的速度，而不是优化个人开发的速度。个人的开发速度很重要，但它不如整个团队的开发速度重要。当cr很慢时，会发生以下几件事：</p>
 <ul>
 <li>团队整体的速度下降。review慢的话，对于团队其他人来说重要的新功能与缺陷修复将会被延迟数天、数周甚至数月，只因为它们正在或者等待review。</li>
 <li>开发人员开始抗议cr。若reviewer每隔几天才回应一次，但每次都要求对CL进行重大更改的话，那么开发人员可能会感到非常沮丧与觉得困难，而这通常会演变成抱怨。如果reviewer请求相同的实质性更改(且确实可以改善代码质量状况)，但在每次开发人员提交新的改动时都能快速反应的话，这些抱怨往往会消失。<strong>大多数关于cr的抱怨，往往可以通过加快流程来解决。</strong></li>
@@ -349,7 +350,10 @@
     <a href="/2022/06/07/%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90%E6%A3%80%E6%B5%8B%E5%B7%A5%E5%85%B7%E5%8F%8A%E8%A7%84%E5%88%99/" rel="prev" title="静态分析检测工具及规则">
       <i class="fa fa-chevron-left"></i> 静态分析检测工具及规则
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2022/06/15/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/" rel="next" title="单元测试">
+      单元测试 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -422,7 +426,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
