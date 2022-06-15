@@ -170,7 +170,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-06-15 00:02:16 / 修改时间：00:12:56" itemprop="dateCreated datePublished" datetime="2022-06-15T00:02:16+08:00">2022-06-15</time>
+              <time title="创建时间：2022-06-15 00:02:16 / 修改时间：21:05:48" itemprop="dateCreated datePublished" datetime="2022-06-15T00:02:16+08:00">2022-06-15</time>
             </span>
 
           
@@ -200,8 +200,60 @@
 </ul>
 <p>上面的定义有点不好理解，解释一下：  </p>
 <ul>
-<li>MC&#x2F;DC首先要求实现条件覆盖、判定覆盖，在此基础上，对于每一个条件C，要求存-在符合以下条件的两次计算：<br>  1）条件C所在判定内的所有条件，除条件C外，其他条件的取值完全相同；<br>  2）条件C的取值相反；<br>  3）判定的计算结果相反。</li>
+<li>MC&#x2F;DC在语句覆盖和分支覆盖的基础上，另外要求，每个判定中的每个判定条件，必须独立影响判定的结果，尤其是对于一个判定中包含两个及以上判定条件的程序。</li>
+<li>在实际测试时，先进行语句覆盖测试和分支覆盖测试，然后基于语句和分支覆盖率情况，对不满足MC&#x2F;DC覆盖率的判定条件进行测试。</li>
 </ul>
+<p><strong>在设计MC&#x2F;DC测试用例时，可以采用以下技巧：</strong></p>
+<p>若判定中仅包含“||”运算符，达到MC&#x2F;DC最小测试集的方法是，控制其他条件为F，依次将当前关注条件设置为T、F。</p>
+<p>例如：A||B，需要3个测试用例达到MC&#x2F;DC覆盖，依次为T、F；F、F；F、T</p>
+<p>若判定中仅包含“&amp;&amp;”运算符，达到MC&#x2F;DC最小测试集的方法是，设其他条件为T，依次将当前关注条件设置为T、F。</p>
+<p>例如：A&amp;&amp;B，需要3个测试用例达到MC&#x2F;DC覆盖，依次为T、T；F、T；T、F。</p>
+<p>若判定中既包含“||”又包含“&amp;&amp;”，先将条件分块，然后按照上述方法进行排列组合。</p>
+<p>当然，还有一个捷径，就是查看单元测试工具里的“结构覆盖报告”，按照报告进行查漏补缺。</p>
+<p><strong>例如：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(A&amp;&amp;B)</span><br><span class="line">&#123;</span><br><span class="line">	Action1;</span><br><span class="line">	<span class="keyword">if</span>(C||D)</span><br><span class="line">		&#123;</span><br><span class="line">			Action2;</span><br><span class="line">		&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>1、语句覆盖测试：</p>
+<p>（“X”表示取“T”或“F”都可以，下同）</p>
+<p><img src="https://pic2.zhimg.com/v2-b1182c7aebc2bafbc313268896b62a60_r.jpg?source=1940ef5c" alt="preview"></p>
+<p>2、分支覆盖测试：</p>
+<p><img src="https://pic2.zhimg.com/v2-b1182c7aebc2bafbc313268896b62a60_r.jpg?source=1940ef5c" alt="preview"></p>
+<p>3、MC&#x2F;DC测试：</p>
+<p>采用MC&#x2F;DC测试技巧，对A&amp;&amp;B、C||D的两个判定分开考虑，再进行组合：</p>
+<p>1）A&amp;&amp;B</p>
+<p><img src="https://pic1.zhimg.com/50/v2-1c7c2c58c88d57e622016440d9bc5bbd_720w.jpg?source=1940ef5c" alt="img"></p>
+<p>2）C||D</p>
+<p><img src="https://pica.zhimg.com/v2-ef068798ba7eb7465478da120109205d_r.jpg?source=1940ef5c" alt="preview"></p>
+<p>对代码分析后发现，只有A与B同为T的情况下，才需考虑C与D，因此MC&#x2F;DC覆盖测试用例为：</p>
+<p><img src="https://pic1.zhimg.com/80/v2-1b6e560cafdc52fff0b6cb5d41bd2db1_720w.jpg?source=1940ef5c" alt="img"></p>
+<p>因此对于一个具有N个条件的判定，所有条件排列组合的数量是2的N次方，但实际上，满足MC&#x2F;DC覆盖率的用例数量，下界为N+1，上界为2N。以上述例子来说，所有条件排列组合是2的4次方&#x3D;16个，而满足MC&#x2F;DC覆盖率只需要5个用例。</p>
+<p><strong>案例1 判定条件恒成立，MC&#x2F;DC覆盖率不达标</strong></p>
+<p><img src="https://pica.zhimg.com/80/v2-d5b64ff10d88b19c308bcd5e59d22513_720w.jpg?source=1940ef5c" alt="img"></p>
+<p>代码中黄色高亮的第一行，需要满足MC&#x2F;DC覆盖率测试要求，将其简化为if(A&gt;0 &amp;&amp; B&gt;0)，设计测试用例如下：</p>
+<p><img src="https://pic1.zhimg.com/80/v2-370e838b4f23e2b7fcd77f460f4ab2f5_720w.jpg?source=1940ef5c" alt="img"></p>
+<p>程序运行中发现，代码中黄色高亮的第二行，会影响B&gt;0的判定条件：</p>
+<p>当for循环执行第一次，A&#x3D;0、B&#x3D;0，可执行用例1；</p>
+<p>当for循环执行次数大于1，由于A的自加行为（跟随循环次数变化）以及B的自加行为（代码中黄色高亮的第二行），使得条件A&gt;0&amp;&amp;B&gt;0恒成立，用例2恒成立。</p>
+<p>因此，始终无法出现A&gt;0 &amp;&amp; B&lt;&#x3D;0、A&lt;&#x3D;0 &amp;&amp; B&gt;0（T、F；F、T）的情况，用例3和用例4不能满足，MC&#x2F;DC覆盖率无法达到100%。</p>
+<p>这种情况只能通过“解释说明”的办法，描述MC&#x2F;DC覆盖率无法达到100%的原因。并且进行人工代码审查，避免程序存在错误。</p>
+<p><strong>案例2  判定条件存在嵌套，MC&#x2F;DC覆盖率不达标</strong></p>
+<p><img src="https://pica.zhimg.com/80/v2-d04760553c1a435fe04e51dfb9e62ca3_720w.jpg?source=1940ef5c" alt="img"></p>
+<p>代码中黄色高亮的第一行和第二行，均需要满足MC&#x2F;DC覆盖率测试要求，我们先称之为判定一和判定二，将判定一简化为if(A&#x3D;&#x3D;0x0100u ||!B)，判定二简化为if(A&#x3D;&#x3D;0x0200u &amp;&amp; B)。</p>
+<p>对判定一设计MC&#x2F;DC测试用例如下：</p>
+<p><img src="https://pic3.zhimg.com/80/v2-86a238964edd3e217ad5ab2c73c64591_720w.jpg?source=1940ef5c" alt="img"></p>
+<p>对判定二设计MC&#x2F;DC测试用例如下：</p>
+<p><img src="https://pica.zhimg.com/80/v2-2063707a8de4860415d35b4276b08dd3_720w.jpg?source=1940ef5c" alt="img"></p>
+<p>程序运行中发现，两个判定条件存在嵌套，互相影响：</p>
+<p>设置A为0x0300u、B为T，可执行用例1；</p>
+<p>设置A为0x0100u、B为T，可执行用例2。进而满足用例6，执行用例6；</p>
+<p>设置A为0x0200u、B为F，可执行用例3。进而满足用例4，执行用例4；</p>
+<p>但是，用例5始终无法满足，因为当A为0x0200u、B为T时，判定一为F，直接跳出该逻辑分支，更不会执行判定二，MC&#x2F;DC覆盖率无法达到100%。同样，可用解释说明+代码审查的方式处理。</p>
+<p><strong><strong>案例3 判定条件互斥，分支覆盖率不达标</strong></strong></p>
+<p><img src="https://pic2.zhimg.com/80/v2-1da90cb3c2390fc2abee9766c53d9b61_720w.jpg?source=1940ef5c" alt="img"></p>
+<p>代码中黄色高亮的第一行和第二行，是单一判定条件，因此需要满足的是分支覆盖率测试要求。</p>
+<p>我们先称之为判定一和判定二，两者互斥，判定二实为判定一的else分支。</p>
+<p>当判定一为F时、判定二为T，可执行判定二；</p>
+<p>但当判定一为T时，直接continue跳出，不会执行到判定二，因此分支覆盖率不能达到100%。</p>
 
       
     </div>
