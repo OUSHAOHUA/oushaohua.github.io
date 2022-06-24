@@ -145,6 +145,216 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://oushaohua.github.io/2022/06/24/%E6%96%87%E4%BB%B6%E4%B8%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%8E%8B%E7%BC%A9%EF%BC%8C%E6%89%93%E5%8C%85%E4%B8%8E%E5%A4%87%E4%BB%BD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaoou">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaoou">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/06/24/%E6%96%87%E4%BB%B6%E4%B8%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%8E%8B%E7%BC%A9%EF%BC%8C%E6%89%93%E5%8C%85%E4%B8%8E%E5%A4%87%E4%BB%BD/" class="post-title-link" itemprop="url">文件与文件系统的压缩，打包与备份</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-06-24 21:44:12 / 修改时间：22:05:08" itemprop="dateCreated datePublished" datetime="2022-06-24T21:44:12+08:00">2022-06-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Linux-系统常见的压缩指令"><a href="#Linux-系统常见的压缩指令" class="headerlink" title="Linux 系统常见的压缩指令"></a>Linux 系统常见的压缩指令</h2><p>在Linux的环境中，压缩文件的扩展名大多是：“*.tar,* .tar.gz, <em>.tgz,</em> .gz, <em>.Z,</em> .bz2, *.xz”，为什么会有这样的扩展名呢？不是说 Linux 的扩展名没有什么作用吗？</p>
+<p>这是因为 Linux 支持的压缩指令非常多，且不同的指令所用的压缩技术并不相同，当然彼此之间可能就无法互通压缩&#x2F;解压缩文件啰。 所以，当你下载到某个压缩文件时，自然就需要知道该文件是由哪种压缩指令所制作出来的，好用来对照着解压缩啊！ 也就是说，虽然 Linux 文件的属性基本上是与文件名没有绝对关系的， 但是为了帮助我们人类小小的脑袋瓜子，所以适当的扩展名还是必要的！ 下面我们就列出几个常见的压缩文件扩展名吧：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">*.Z         compress 程序压缩的文件；</span><br><span class="line">*.zip       zip 程序压缩的文件；</span><br><span class="line">*.gz        gzip 程序压缩的文件；</span><br><span class="line">*.bz2       bzip2 程序压缩的文件；</span><br><span class="line">*.xz        xz 程序压缩的文件；</span><br><span class="line">*.tar       tar 程序打包的数据，并没有压缩过；</span><br><span class="line">*.tar.gz    tar 程序打包的文件，其中并且经过 gzip 的压缩</span><br><span class="line">*.tar.bz2   tar 程序打包的文件，其中并且经过 bzip2 的压缩</span><br><span class="line">*.tar.xz    tar 程序打包的文件，其中并且经过 xz 的压缩</span><br></pre></td></tr></table></figure>
+
+<p>Linux上常见的压缩指令就是 gzip, bzip2 以及最新的 xz ，至于 compress 已经退流行了。为了支持 windows 常见的 zip，其实 Linux 也早就有 zip 指令了！ gzip 是由 <a target="_blank" rel="noopener" href="http://www.gnu.org/">GNU 计划</a>所开发出来的压缩指令，该指令已经取代了 compress 。 后来 GNU 又开发出 bzip2 及 xz 这几个压缩比更好的压缩指令！不过，这些指令通常仅能针对一个文件来压缩与解压缩，如此一来， 每次压缩与解压缩都要一大堆文件，岂不烦人？此时，那个所谓的“打包软件, tar”就显的很重要啦！</p>
+<p>这个 tar 可以将很多文件“打包”成为一个文件！甚至是目录也可以这么玩。不过，单纯的 tar 功能仅是“打包”而已，亦即是将很多文件集结成为一个文件， 事实上，他并没有提供压缩的功能，后来，<a target="_blank" rel="noopener" href="http://www.gnu.org/">GNU 计划</a>中，将整个 tar 与压缩的功能结合在一起，如此一来提供使用者更方便并且更强大的压缩与打包功能！ 下面我们就来谈一谈这些在 Linux 下面基本的压缩指令吧！</p>
+<h3 id="gzip-zcat-x2F-zmore-x2F-zless-x2F-zgrep"><a href="#gzip-zcat-x2F-zmore-x2F-zless-x2F-zgrep" class="headerlink" title="gzip, zcat&#x2F;zmore&#x2F;zless&#x2F;zgrep"></a>gzip, zcat&#x2F;zmore&#x2F;zless&#x2F;zgrep</h3><p>gzip 可以说是应用度最广的压缩指令了！目前 gzip 可以解开 compress, zip 与 gzip 等软件所压缩的文件。 至于 gzip 所创建的压缩文件为 *.gz 的文件名喔！让我们来看看这个指令的语法吧：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[dmtsai@study ~]$ gzip [-cdtv#] 文件名</span><br><span class="line">[dmtsai@study ~]$ zcat 文件名.gz</span><br><span class="line">选项与参数：</span><br><span class="line">-c  ：将压缩的数据输出到屏幕上，可通过数据流重导向来处理；</span><br><span class="line">-d  ：解压缩的参数；</span><br><span class="line">-t  ：可以用来检验一个压缩文件的一致性～看看文件有无错误；</span><br><span class="line">-v  ：可以显示出原文件/压缩文件的压缩比等信息；</span><br><span class="line">-#  ：# 为数字的意思，代表压缩等级，-1 最快，但是压缩比最差、-9 最慢，但是压缩比最好！默认是 -6</span><br></pre></td></tr></table></figure>
+
+<h3 id="bzip2-bzcat-x2F-bzmore-x2F-bzless-x2F-bzgrep"><a href="#bzip2-bzcat-x2F-bzmore-x2F-bzless-x2F-bzgrep" class="headerlink" title="bzip2, bzcat&#x2F;bzmore&#x2F;bzless&#x2F;bzgrep"></a>bzip2, bzcat&#x2F;bzmore&#x2F;bzless&#x2F;bzgrep</h3><p>若说 gzip 是为了取代 compress 并提供更好的压缩比而成立的，那么 bzip2 则是为了取代 gzip 并提供更佳的压缩比而来的。 bzip2 真是很不错用的东西～这玩意的压缩比竟然比 gzip 还要好～至于 bzip2 的用法几乎与 gzip 相同！看看下面的用法吧！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[dmtsai@study ~]$ bzip2 [-cdkzv#] 文件名</span><br><span class="line">[dmtsai@study ~]$ bzcat 文件名.bz2</span><br><span class="line">选项与参数：</span><br><span class="line">-c  ：将压缩的过程产生的数据输出到屏幕上！</span><br><span class="line">-d  ：解压缩的参数</span><br><span class="line">-k  ：保留原始文件，而不会删除原始的文件喔！</span><br><span class="line">-z  ：压缩的参数 （默认值，可以不加）</span><br><span class="line">-v  ：可以显示出原文件/压缩文件的压缩比等信息；</span><br><span class="line">-#  ：与 gzip 同样的，都是在计算压缩比的参数， -9 最佳， -1 最快！</span><br></pre></td></tr></table></figure>
+
+<h3 id="xz-xzcat-x2F-xzmore-x2F-xzless-x2F-xzgrep"><a href="#xz-xzcat-x2F-xzmore-x2F-xzless-x2F-xzgrep" class="headerlink" title="xz, xzcat&#x2F;xzmore&#x2F;xzless&#x2F;xzgrep"></a>xz, xzcat&#x2F;xzmore&#x2F;xzless&#x2F;xzgrep</h3><p>虽然 bzip2 已经具有很棒的压缩比，不过显然某些自由软件开发者还不满足，因此后来还推出了 xz 这个压缩比更高的软件！这个软件的用法也跟 gzip&#x2F;bzip2 几乎一模一样！ 那我们就来瞧一瞧！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[dmtsai@study ~]$ xz [-dtlkc#] 文件名</span><br><span class="line">[dmtsai@study ~]$ xcat 文件名.xz</span><br><span class="line">选项与参数：</span><br><span class="line">-d  ：就是解压缩啊！</span><br><span class="line">-t  ：测试压缩文件的完整性，看有没有错误</span><br><span class="line">-l  ：列出压缩文件的相关信息</span><br><span class="line">-k  ：保留原本的文件不删除～</span><br><span class="line">-c  ：同样的，就是将数据由屏幕上输出的意思！</span><br><span class="line">-#  ：同样的，也有较佳的压缩比的意思！</span><br></pre></td></tr></table></figure>
+
+<h2 id="打包指令：-tar"><a href="#打包指令：-tar" class="headerlink" title="打包指令： tar"></a>打包指令： tar</h2><h3 id="tar"><a href="#tar" class="headerlink" title="tar"></a>tar</h3><p>tar 的选项与参数非常的多！我们只讲几个常用的选项，更多选项您可以自行 man tar 查询啰！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[dmtsai@study ~]$ tar [-z&amp;#124;-j&amp;#124;-J] [cv] [-f 待创建的新文件名] filename... &amp;lt;==打包与压缩</span><br><span class="line">[dmtsai@study ~]$ tar [-z&amp;#124;-j&amp;#124;-J] [tv] [-f 既有的 tar文件名]             &amp;lt;==察看文件名</span><br><span class="line">[dmtsai@study ~]$ tar [-z&amp;#124;-j&amp;#124;-J] [xv] [-f 既有的 tar文件名] [-C 目录]   &amp;lt;==解压缩</span><br><span class="line">选项与参数：</span><br><span class="line">-c  ：创建打包文件，可搭配 -v 来察看过程中被打包的文件名（filename）</span><br><span class="line">-t  ：察看打包文件的内容含有哪些文件名，重点在察看“文件名”就是了；</span><br><span class="line">-x  ：解打包或解压缩的功能，可以搭配 -C （大写） 在特定目录解开</span><br><span class="line">      特别留意的是， -c, -t, -x 不可同时出现在一串命令行中。</span><br><span class="line">-z  ：通过 gzip  的支持进行压缩/解压缩：此时文件名最好为 *.tar.gz</span><br><span class="line">-j  ：通过 bzip2 的支持进行压缩/解压缩：此时文件名最好为 *.tar.bz2</span><br><span class="line">-J  ：通过 xz    的支持进行压缩/解压缩：此时文件名最好为 *.tar.xz</span><br><span class="line">      特别留意， -z, -j, -J 不可以同时出现在一串命令行中</span><br><span class="line">-v  ：在压缩/解压缩的过程中，将正在处理的文件名显示出来！</span><br><span class="line">-f filename：-f 后面要立刻接要被处理的文件名！建议 -f 单独写一个选项啰！（比较不会忘记）</span><br><span class="line">-C 目录    ：这个选项用在解压缩，若要在特定目录解压缩，可以使用这个选项。</span><br><span class="line"></span><br><span class="line">其他后续练习会使用到的选项介绍：</span><br><span class="line">-p（小写） ：保留备份数据的原本权限与属性，常用于备份（-c）重要的配置文件</span><br><span class="line">-P（大写） ：保留绝对路径，亦即允许备份数据中含有根目录存在之意；</span><br><span class="line">--exclude=FILE：在压缩的过程中，不要将 FILE 打包！</span><br></pre></td></tr></table></figure>
+
+<p>其实最简单的使用 tar 就只要记忆下面的方式即可：</p>
+<ul>
+<li><p>压　缩：tar -j<u>c</u>v -f filename.tar.bz2 要被压缩的文件或目录名称</p>
+</li>
+<li><p>查　询：tar -j<u>t</u>v -f filename.tar.bz2</p>
+</li>
+<li><p>解压缩：tar -j<u>x</u>v -f filename.tar.bz2 -C 欲解压缩的目录</p>
+</li>
+<li><p>使用 tar 加入 -z, -j 或 -J 的参数备份 &#x2F;etc&#x2F; 目录</p>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">[dmtsai@study ~]$ su -  # 因为备份 /etc 需要 root 的权限，否则会出现一堆错误</span><br><span class="line">[root@study ~]# time tar -zpcv -f /root/etc.tar.gz /etc</span><br><span class="line">tar: Removing leading `/&#x27; from member names  &amp;lt;==注意这个警告讯息</span><br><span class="line">/etc/</span><br><span class="line">....（中间省略）....</span><br><span class="line">/etc/hostname</span><br><span class="line">/etc/aliases.db</span><br><span class="line"></span><br><span class="line">real    0m0.799s   # 多了 time 会显示程序运行的时间！看 real 就好了！花去了 0.799s</span><br><span class="line">user    0m0.767s</span><br><span class="line">sys     0m0.046s</span><br><span class="line"><span class="meta"># </span><span class="language-bash">由于加上 -v 这个选项，因此正在作用中的文件名就会显示在屏幕上。</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">如果你可以翻到第一页，会发现出现上面的错误讯息！下面会讲解。</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">至于 -p 的选项，重点在于“保留原本文件的权限与属性”之意。</span></span><br><span class="line"></span><br><span class="line">[root@study ~]# time tar -jpcv -f /root/etc.tar.bz2 /etc</span><br><span class="line">....（前面省略）....</span><br><span class="line">real    0m1.913s</span><br><span class="line">user    0m1.881s</span><br><span class="line">sys     0m0.038s</span><br><span class="line">[root@study ~]# time tar -Jpcv -f /root/etc.tar.xz  /etc</span><br><span class="line">....（前面省略）....</span><br><span class="line">real    0m9.023s</span><br><span class="line">user    0m8.984s</span><br><span class="line">sys     0m0.086s</span><br><span class="line"><span class="meta"># </span><span class="language-bash">显示的讯息会跟上面一模一样啰！不过时间会花比较多！使用了 -J 时，会花更多时间</span></span><br><span class="line"></span><br><span class="line">[root@study ~]# ll /root/etc*</span><br><span class="line">-rw-r--r--. 1 root root 6721809 Jul  1 00:16 /root/etc.tar.bz2</span><br><span class="line">-rw-r--r--. 1 root root 7758826 Jul  1 00:14 /root/etc.tar.gz</span><br><span class="line">-rw-r--r--. 1 root root 5511500 Jul  1 00:16 /root/etc.tar.xz</span><br><span class="line">[root@study ~]# du -sm /etc</span><br><span class="line">28     /etc  # 实际目录约占有 28MB 的意思！</span><br></pre></td></tr></table></figure>
+
+<p>压缩比越好当然要花费的运算时间越多！我们从上面可以看到，虽然使用 gzip 的速度相当快，总时间花费不到 1 秒钟，但是压缩率最糟糕！ 如果使用 xz 的话，虽然压缩比最佳！不过竟然花了 9 秒钟的时间耶！这还仅是备份 28MBytes 的 &#x2F;etc 而已，如果备份的数据是很大容量的， 那你真的要考虑时间成本才行！</p>
+<ul>
+<li>查阅 tar 文件的数据内容 （可察看文件名），与备份文件名有否根目录的意义</li>
+</ul>
+<p>要察看由 tar 所创建的打包文件内部的文件名非常的简单！可以这样做：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@study ~]# tar -jtv -f /root/etc.tar.bz2</span><br><span class="line">....（前面省略）....</span><br><span class="line">-rw-r--r-- root/root       131 2015-05-25 17:48 etc/locale.conf</span><br><span class="line">-rw-r--r-- root/root        19 2015-05-04 17:56 etc/hostname</span><br><span class="line">-rw-r--r-- root/root     12288 2015-05-04 17:59 etc/aliases.db</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>将备份的数据解压缩，并考虑特定目录的解压缩动作 （-C 选项的应用）</li>
+</ul>
+<p>那如果想要解打包呢？很简单的动作就是直接进行解打包嘛！</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@study ~]# tar -jxv -f /root/etc.tar.bz2</span><br><span class="line">[root@study ~]# ll</span><br><span class="line">....（前面省略）....</span><br><span class="line">drwxr-xr-x. 131 root root    8192 Jun 26 22:14 etc</span><br><span class="line">....（后面省略）....</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>仅解开单一文件的方法</li>
+</ul>
+<p>刚刚上头我们解压缩都是将整个打包文件的内容全部解开！想像一个情况，如果我只想要解开打包文件内的其中一个文件而已， 那该如何做呢？很简单的，你只要使用 -jtv 找到你要的文件名，然后将该文件名解开即可。 我们用下面的例子来说明一下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">1\. 先找到我们要的文件名，假设解开 shadow 文件好了：</span></span><br><span class="line">[root@study ~]# tar -jtv -f /root/etc.tar.bz2 &amp;#124; grep &#x27;shadow&#x27;</span><br><span class="line">---------- root/root       721 2015-06-17 00:20 etc/gshadow</span><br><span class="line">---------- root/root      1183 2015-06-17 00:20 etc/shadow-</span><br><span class="line">---------- root/root      1210 2015-06-17 00:20 etc/shadow  &amp;lt;==这是我们要的！</span><br><span class="line">---------- root/root       707 2015-06-17 00:20 etc/gshadow-</span><br><span class="line"><span class="meta"># </span><span class="language-bash">先搜寻重要的文件名！其中那个 grep 是“撷取”关键字的功能！我们会在第三篇说明！</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">这里您先有个概念即可！那个管线 &amp;<span class="comment">#124; 配合 grep 可以撷取关键字的意思！</span></span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">2\. 将该文件解开！语法与实际作法如下：</span></span><br><span class="line">[root@study ~]# tar -jxv -f 打包档.tar.bz2 待解开文件名</span><br><span class="line">[root@study ~]# tar -jxv -f /root/etc.tar.bz2 etc/shadow</span><br><span class="line">etc/shadow</span><br><span class="line">[root@study ~]# ll etc</span><br><span class="line">total 4</span><br><span class="line">----------. 1 root root 1210 Jun 17 00:20 shadow</span><br><span class="line"><span class="meta"># </span><span class="language-bash">很有趣！此时只会解开一个文件而已！不过，重点是那个文件名！你要找到正确的文件名。</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">在本例中，你不能写成 /etc/shadow ！因为记录在 etc.tar.bz2 内的并没有 / 之故！</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>打包某目录，但不含该目录下的某些文件之作法</li>
+</ul>
+<p>假设我们想要打包 &#x2F;etc&#x2F; &#x2F;root 这几个重要的目录，但却不想要打包 &#x2F;root&#x2F;etc* 开头的文件，因为该文件都是刚刚我们才创建的备份文件嘛！ 而且假设这个新的打包文件要放置成为 &#x2F;root&#x2F;system.tar.bz2 ，当然这个文件自己不要打包自己 （因为这个文件放置在 &#x2F;root 下面啊！），此时我们可以通过 –exclude 的帮忙！ 那个 exclude 就是不包含的意思！所以你可以这样做：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@study ~]# tar -jcv  -f /root/system.tar.bz2 --exclude=/root/etc* \</span><br><span class="line">&amp;gt; --exclude=/root/system.tar.bz2  /etc /root</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>仅备份比某个时刻还要新的文件</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">1\. 先由 [find](../Text/index.html<span class="comment">#find) 找出比 /etc/passwd 还要新的文件</span></span></span><br><span class="line">[root@study ~]# find /etc -newer /etc/passwd</span><br><span class="line">....（过程省略）....</span><br><span class="line"><span class="meta"># </span><span class="language-bash">此时会显示出比 /etc/passwd 这个文件的 mtime 还要新的文件名，</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">这个结果在每部主机都不相同！您先自行查阅自己的主机即可，不会跟鸟哥一样！</span></span><br><span class="line"></span><br><span class="line">[root@study ~]# ll /etc/passwd</span><br><span class="line">-rw-r--r--. 1 root root 2092  Jun 17 00:20 /etc/passwd</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">2\. 好了，那么使用 tar 来进行打包吧！日期为上面看到的 2015/06/17</span></span><br><span class="line">[root@study ~]# tar -jcv -f /root/etc.newer.then.passwd.tar.bz2 \</span><br><span class="line">&amp;gt; --newer-mtime=&quot;2015/06/17&quot; /etc/*</span><br><span class="line">tar: Option --newer-mtime: Treating date `2015/06/17&#x27; as 2015-06-17 00:00:00</span><br><span class="line">tar: Removing leading `/&#x27; from member names</span><br><span class="line">/etc/abrt/</span><br><span class="line">....（中间省略）....</span><br><span class="line">/etc/alsa/</span><br><span class="line">/etc/yum.repos.d/</span><br><span class="line">....（中间省略）....</span><br><span class="line">tar: /etc/yum.repos.d/CentOS-fasttrack.repo: file is unchanged; not dumped</span><br><span class="line"><span class="meta"># </span><span class="language-bash">最后行显示的是“没有被备份的”，亦即 not dumped 的意思！</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">3\. 显示出文件即可</span></span><br><span class="line">[root@study ~]# tar -jtv -f /root/etc.newer.then.passwd.tar.bz2 &amp;#124; grep -v &#x27;/$&#x27; </span><br><span class="line"><span class="meta"># </span><span class="language-bash">通过这个指令可以调用出 tar.bz2 内的结尾非 / 的文件名！就是我们要的啦！</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>基本名称： tarfile, tarball ？</li>
+</ul>
+<p>tar 除了可以将数据打包成为文件之外，还能够将文件打包到某些特别的设备去，举例来说， 磁带机 （tape） 就是一个常见的例子。磁带机由于是一次性读取&#x2F;写入的设备，因此我们不能够使用类似 cp 等指令来复制的！ 那如果想要将 &#x2F;home, &#x2F;root, &#x2F;etc 备份到磁带机 （&#x2F;dev&#x2F;st0） 时，就可以使用：“tar -cv -f &#x2F;dev&#x2F;st0 &#x2F;home &#x2F;root &#x2F;etc”，很简单容易吧！ 磁带机用在备份 （尤其是企业应用） 是很常见的工作喔！</p>
+<ul>
+<li>特殊应用：利用管线命令与数据流</li>
+</ul>
+<p>另外值得一提的是，tar 打包出来的文件有没有进行压缩所得到文件称呼不同喔！ 如果仅是打包而已，就是“ tar -cv -f file.tar ”而已，这个文件我们称呼为 tarfile 。 如果还有进行压缩的支持，例如“ tar -jcv -f file.tar.bz2 ”时，我们就称呼为 tarball （tar 球？）！</p>
+<p>在 tar 的使用中，有一种方式最特殊，那就是通过标准输入输出的数据流重导向（standard input&#x2F;standard output）， 以及管线命令 （pipe） 的方式，将待处理的文件一边打包一边解压缩到目标目录去。 关于数据流重导向与管线命令更详细的数据我们会在<a target="_blank" rel="noopener" href="https://wizardforcel.gitbooks.io/vbird-linux-basic-4e/Text/index.html">第十章 bash</a> 再跟大家介绍， 下面先来看一个例子吧！</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">1\. 将 /etc 整个目录一边打包一边在 /tmp 解开</span></span><br><span class="line">[root@study ~]# cd /tmp</span><br><span class="line">[root@study tmp]# tar -cvf - /etc &amp;#124; tar -xvf -</span><br><span class="line"><span class="meta"># </span><span class="language-bash">这个动作有点像是 <span class="built_in">cp</span> -r /etc /tmp 啦～依旧是有其有用途的！</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">要注意的地方在于输出文件变成 - 而输入文件也变成 - ，又有一个 &amp;<span class="comment">#124; 存在～</span></span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">这分别代表 standard output, standard input 与管线命令啦！</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">简单的想法中，你可以将 - 想成是在内存中的一个设备（缓冲区）。</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">更详细的数据流与管线命令，请翻到 [bash](../Text/index.html) 章节啰！</span></span><br></pre></td></tr></table></figure>
+
+<p>在上面的例子中，我们想要“将 &#x2F;etc 下面的数据直接 copy 到目前所在的路径，也就是 &#x2F;tmp 下面”，但是又觉得使用 cp -r 有点麻烦，那么就直接以这个打包的方式来打包，其中，指令里面的 - 就是表示那个被打包的文件啦！ 由于我们不想要让中间文件存在，所以就以这一个方式来进行复制的行为啦！</p>
+<ul>
+<li>例题：系统备份范例</li>
+</ul>
+<p>系统上有非常多的重要目录需要进行备份，而且其实我们也不建议你将备份数据放置到 &#x2F;root 目录下！ 假设目前你已经知道重要的目录有下面这几个：</p>
+<ul>
+<li>&#x2F;etc&#x2F; （配置文件）</li>
+<li>&#x2F;home&#x2F; （使用者的主文件夹）</li>
+<li>&#x2F;var&#x2F;spool&#x2F;mail&#x2F; （系统中，所有帐号的邮件信箱）</li>
+<li>&#x2F;var&#x2F;spool&#x2F;cron&#x2F; （所有帐号的工作排成配置文件）</li>
+<li>&#x2F;root （系统管理员的主文件夹）</li>
+</ul>
+<p>然后我们也知道，由于<a target="_blank" rel="noopener" href="https://wizardforcel.gitbooks.io/vbird-linux-basic-4e/Text/index.html#loop">第七章</a>曾经做过的练习的关系， &#x2F;home&#x2F;loop* 不需要备份，而且 &#x2F;root 下面的压缩文件也不需要备份，另外假设你要将备份的数据放置到 &#x2F;backups ，并且该目录仅有 root 有权限进入！ 此外，每次备份的文件名都希望不相同，例如使用：backup-system-20150701.tar.bz2 之类的文件名来处理。 那你该如何处理这个备份数据呢？（请先动手作看看，再来察看一下下面的参考解答！）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">1\. 先处理要放置备份数据的目录与权限：</span></span><br><span class="line">[root@study ~]# mkdir /backups</span><br><span class="line">[root@study ~]# chmod 700 /backups</span><br><span class="line">[root@study ~]# ll -d /backups</span><br><span class="line">drwx------. 2 root root 6 Jul  1 17:25 /backups</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">2\. 假设今天是 2015/07/01 ，则创建备份的方式如下：</span></span><br><span class="line">[root@study ~]# tar -jcv -f /backups/backup-system-20150701.tar.bz2 \</span><br><span class="line">&amp;gt; --exclude=/root/*.bz2 --exclude=/root/*.gz --exclude=/home/loop* \</span><br><span class="line">&amp;gt; /etc /home /var/spool/mail /var/spool/cron /root</span><br><span class="line">....（过程省略）....</span><br><span class="line"></span><br><span class="line">[root@study ~]# ll -h /backups/</span><br><span class="line">-rw-r--r--. 1 root root 21M Jul  1 17:26 backup-system-20150701.tar.bz2</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>解压缩后的 SELinux 课题</li>
+</ul>
+<p>如果，鸟哥是说如果，如果因为某些缘故，所以你的系统必须要以备份的数据来回填到原本的系统中，那么得要特别注意复原后的系统的 SELinux 问题！ 尤其是在系统文件上面！例如 &#x2F;etc 下面的文件群。SELinux 是比较特别的细部权限设置，相关的介绍我们会在 16 章好好的介绍一下。 在这里，你只要先知道，SELinux 的权限问题“可能会让你的系统无法存取某些配置文件内容，导致影响到系统的正常使用权”。</p>
+<p>这两天 （2015&#x2F;07） 接到一个网友的 email，他说他使用鸟哥介绍的方法通过 tar 去备份了 &#x2F;etc 的数据，然后尝试在另一部系统上面复原回来。 复原倒是没问题，但是复原完毕之后，无论如何就是无法正常的登陆系统！明明使用单人维护模式去操作系统时，看起来一切正常～但就是无法顺利登陆。 其实这个问题倒是很常见！大部分原因就是因为 &#x2F;etc&#x2F;shadow 这个密码文件的 SELinux 类型在还原时被更改了！导致系统的登陆程序无法顺利的存取它， 才造成无法登陆的窘境。</p>
+<p>那如何处理呢？简单的处理方式有这几个：</p>
+<ul>
+<li>通过各种可行的救援方式登陆系统，然后修改 &#x2F;etc&#x2F;selinux&#x2F;config 文件，将 SELinux 改成 permissive 模式，重新开机后系统就正常了；</li>
+<li>在第一次复原系统后，不要立即重新开机！先使用 restorecon -Rv &#x2F;etc 自动修复一下 SELinux 的类型即可。</li>
+<li>通过各种可行的方式登陆系统，创建 &#x2F;.autorelabel 文件，重新开机后系统会自动修复 SELinux 的类型，并且又会再次重新开机，之后就正常了！</li>
+</ul>
+<h2 id="XFS-文件系统的备份与还原"><a href="#XFS-文件系统的备份与还原" class="headerlink" title="XFS 文件系统的备份与还原"></a>XFS 文件系统的备份与还原</h2><h3 id="XFS-文件系统备份-xfsdump"><a href="#XFS-文件系统备份-xfsdump" class="headerlink" title="XFS 文件系统备份 xfsdump"></a>XFS 文件系统备份 xfsdump</h3><p>其实 xfsdump 的功能颇强！他除了可以进行文件系统的完整备份 （full backup） 之外，还可以进行累积备份 （Incremental backup） 喔！ 啥是累积备份呢？这么说好了，假设你的 &#x2F;home 是独立的一个文件系统，那你在第一次使用 xfsdump 进行完整备份后，等过一段时间的文件系统自然运行后， 你再进行第二次 xfsdump 时，就可以选择累积备份了！此时新备份的数据只会记录与第一次完整备份所有差异的文件而已。</p>
+<p><img src="http://shouce.jb51.net/vbird-linux-basic-4/img/centos7_dump-1.gif" alt="dump 运行的等级 （level）"></p>
+<p>另外，使用 xfsdump 时，请注意下面的限制喔：</p>
+<ul>
+<li>xfsdump 不支持没有挂载的文件系统备份！所以只能备份已挂载的！</li>
+<li>xfsdump 必须使用 root 的权限才能操作 （涉及文件系统的关系）</li>
+<li>xfsdump 只能备份 XFS 文件系统啊！</li>
+<li>xfsdump 备份下来的数据 （文件或储存媒体） 只能让 xfsrestore 解析</li>
+<li>xfsdump 是通过文件系统的 UUID 来分辨各个备份文件的，因此不能备份两个具有相同 UUID 的文件系统喔！</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@study ~]# xfsdump [-L S_label] [-M M_label] [-l #] [-f 备份文件] 待备份数据</span><br><span class="line">[root@study ~]# xfsdump -I</span><br><span class="line">选项与参数：</span><br><span class="line">-L  ：xfsdump 会纪录每次备份的 session 标头，这里可以填写针对此文件系统的简易说明</span><br><span class="line">-M  ：xfsdump 可以纪录储存媒体的标头，这里可以填写此媒体的简易说明</span><br><span class="line">-l  ：是 L 的小写，就是指定等级～有 0~9 共 10 个等级喔！ （默认为 0，即完整备份）</span><br><span class="line">-f  ：有点类似 tar 啦！后面接产生的文件，亦可接例如 /dev/st0 设备文件名或其他一般文件文件名等</span><br><span class="line">-I  ：从 /var/lib/xfsdump/inventory 列出目前备份的信息状态</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>用 xfsdump 备份完整的文件系统</li>
+</ul>
+<p>现在就让我们来做几个范例吧！假设你跟鸟哥一样有将 &#x2F;boot 分区出自己的文件系统，要整个文件系统备份可以这样作：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">1\. 先确定 /boot 是独立的文件系统喔！</span></span><br><span class="line">[root@study ~]# df -h /boot</span><br><span class="line">Filesystem      Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/vda2      1014M  131M  884M  13% /boot      # 挂载 /boot 的是 /dev/vda 设备！</span><br><span class="line"><span class="meta"># </span><span class="language-bash">看！确实是独立的文件系统喔！ /boot 是挂载点！</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">2\. 将完整备份的文件名记录成为 /srv/boot.dump ：</span></span><br><span class="line">[root@study ~]# xfsdump -l 0 -L boot_all -M boot_all -f /srv/boot.dump /boot</span><br><span class="line">xfsdump -l 0 -L boot_all -M boot_all -f /srv/boot.dump /boot</span><br><span class="line">xfsdump: using file dump （drive_simple） strategy</span><br><span class="line">xfsdump: version 3.1.4 （dump format 3.0） - type ^C for status and control</span><br><span class="line">xfsdump: level 0 dump of study.centos.vbird:/boot              # 开始备份本机/boot系统</span><br><span class="line">xfsdump: dump date: Wed Jul  1 18:43:04 2015                   # 备份的时间</span><br><span class="line">xfsdump: session id: 418b563f-26fa-4c9b-98b7-6f57ea0163b1      # 这次dump的ID</span><br><span class="line">xfsdump: session label: &quot;boot_all&quot;                             # 简单给予一个名字记忆</span><br><span class="line">xfsdump: ino map phase 1: constructing initial dump list       # 开始备份程序</span><br><span class="line">xfsdump: ino map phase 2: skipping （no pruning necessary）</span><br><span class="line">xfsdump: ino map phase 3: skipping （only one dump stream）</span><br><span class="line">xfsdump: ino map construction complete</span><br><span class="line">xfsdump: estimated dump size: 103188992 Bytes</span><br><span class="line">xfsdump: creating dump session media file 0 （media 0, file 0）</span><br><span class="line">xfsdump: dumping ino map</span><br><span class="line">xfsdump: dumping directories</span><br><span class="line">xfsdump: dumping non-directory files</span><br><span class="line">xfsdump: ending media file</span><br><span class="line">xfsdump: media file size 102872168 Bytes</span><br><span class="line">xfsdump: dump size （non-dir files） : 102637296 Bytes</span><br><span class="line">xfsdump: dump complete: 1 seconds elapsed</span><br><span class="line">xfsdump: Dump Summary:</span><br><span class="line">xfsdump:   stream 0 /srv/boot.dump OK （success）</span><br><span class="line">xfsdump: Dump Status: SUCCESS</span><br><span class="line"><span class="meta"># </span><span class="language-bash">在指令的下达方面，你也可以不加 -L 及 -M 的，只是那就会进入互动模式，要求你 enter！</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">而执行 xfsdump 的过程中会出现如上的一些讯息，您可以自行仔细的观察！</span></span><br><span class="line"></span><br><span class="line">[root@study ~]# ll /srv/boot.dump</span><br><span class="line">-rw-r--r--. 1 root root 102872168 Jul  1 18:43 /srv/boot.dump</span><br><span class="line"></span><br><span class="line">[root@study ~]# ll /var/lib/xfsdump/inventory</span><br><span class="line">-rw-r--r--. 1 root root 5080 Jul  1 18:43 506425d2-396a-433d-9968-9b200db0c17c.StObj</span><br><span class="line">-rw-r--r--. 1 root root  312 Jul  1 18:43 94ac5f77-cb8a-495e-a65b-2ef7442b837c.InvIndex</span><br><span class="line">-rw-r--r--. 1 root root  576 Jul  1 18:43 fstab</span><br><span class="line"><span class="meta"># </span><span class="language-bash">使用了 xfsdump 之后才会有上述 /var/lib/xfsdump/inventory 内的文件产生喔！</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>用 xfsdump 进行累积备份 （Incremental backups）</li>
+</ul>
+<p>你一定得要进行过完整备份后 （-l 0） 才能够继续有其他累积备份 （-l 1~9） 的能耐！所以，请确定上面的实做已经完成！ 接下来让我们来搞一搞累积备份功能吧！</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">0\. 看一下有没有任何文件系统被 xfsdump 过的数据？</span></span><br><span class="line">[root@study ~]# xfsdump -I</span><br><span class="line">file system 0:</span><br><span class="line">    fs id:          94ac5f77-cb8a-495e-a65b-2ef7442b837c</span><br><span class="line">    session 0:</span><br><span class="line">        mount point:    study.centos.vbird:/boot</span><br><span class="line">        device:         study.centos.vbird:/dev/vda2</span><br><span class="line">        time:           Wed Jul  1 18:43:04 2015</span><br><span class="line">        session label:  &quot;boot_all&quot;</span><br><span class="line">        session id:     418b563f-26fa-4c9b-98b7-6f57ea0163b1</span><br><span class="line">        level:          0</span><br><span class="line">        resumed:        NO</span><br><span class="line">        subtree:        NO</span><br><span class="line">        streams:        1</span><br><span class="line">        stream 0:</span><br><span class="line">                pathname:       /srv/boot.dump</span><br><span class="line">                start:          ino 132 offset 0</span><br><span class="line">                end:            ino 2138243 offset 0</span><br><span class="line">                interrupted:    NO</span><br><span class="line">                media files:    1</span><br><span class="line">                media file 0:</span><br><span class="line">                        mfile index:    0</span><br><span class="line">                        mfile type:     data</span><br><span class="line">                        mfile size:     102872168</span><br><span class="line">                        mfile start:    ino 132 offset 0</span><br><span class="line">                        mfile end:      ino 2138243 offset 0</span><br><span class="line">                        media label:    &quot;boot_all&quot;</span><br><span class="line">                        media id:       a6168ea6-1ca8-44c1-8d88-95c863202eab</span><br><span class="line">xfsdump: Dump Status: SUCCESS</span><br><span class="line"><span class="meta"># </span><span class="language-bash">我们可以看到目前仅有一个 session 0 的备份数据而已！而且是 level 0 喔！</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">1\. 先恶搞一下，创建一个大约 10 MB 的文件在 /boot 内：</span></span><br><span class="line">[root@study ~]# dd if=/dev/zero of=/boot/testing.img bs=1M count=10</span><br><span class="line">10+0 records in</span><br><span class="line">10+0 records out</span><br><span class="line">10485760 Bytes （10 MB） copied, 0.166128 seconds, 63.1 MB/s</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">2\. 开始创建差异备份文件，此时我们使用 level 1 吧：</span></span><br><span class="line">[root@study ~]# xfsdump -l 1 -L boot_2 -M boot_2 -f /srv/boot.dump1 /boot</span><br><span class="line">....（中间省略）....</span><br><span class="line"></span><br><span class="line">[root@study ~]# ll /srv/boot*</span><br><span class="line">-rw-r--r--. 1 root root 102872168 Jul  1 18:43 /srv/boot.dump</span><br><span class="line">-rw-r--r--. 1 root root  10510952 Jul  1 18:46 /srv/boot.dump1</span><br><span class="line"><span class="meta"># </span><span class="language-bash">看看文件大小，岂不是就是刚刚我们所创建的那个大文件的容量吗？ ^_^</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">3\. 最后再看一下是否有记录 level 1 备份的时间点呢？</span></span><br><span class="line">[root@study ~]# xfsdump -I</span><br><span class="line">file system 0:</span><br><span class="line">    fs id:          94ac5f77-cb8a-495e-a65b-2ef7442b837c</span><br><span class="line">    session 0:</span><br><span class="line">        mount point:    study.centos.vbird:/boot</span><br><span class="line">        device:         study.centos.vbird:/dev/vda2</span><br><span class="line">....（中间省略）....</span><br><span class="line"></span><br><span class="line">    session 1:</span><br><span class="line">        mount point:    study.centos.vbird:/boot</span><br><span class="line">        device:         study.centos.vbird:/dev/vda2</span><br><span class="line">        time:           Wed Jul  1 18:46:21 2015</span><br><span class="line">        session label:  &quot;boot_2&quot;</span><br><span class="line">        session id:     c71d1d41-b3bb-48ee-bed6-d77c939c5ee8</span><br><span class="line">        level:          1</span><br><span class="line">        resumed:        NO</span><br><span class="line">        subtree:        NO</span><br><span class="line">        streams:        1</span><br><span class="line">        stream 0:</span><br><span class="line">                pathname:       /srv/boot.dump1</span><br><span class="line">                start:          ino 455518 offset 0</span><br></pre></td></tr></table></figure>
+
+<h3 id="XFS-文件系统还原-xfsrestore"><a href="#XFS-文件系统还原-xfsrestore" class="headerlink" title="XFS 文件系统还原 xfsrestore"></a>XFS 文件系统还原 xfsrestore</h3><p>备份文件就是在急用时可以回复系统的重要数据，所以有备份当然就得要学学如何复原了！ xfsdump 的复原使用的是 xfsrestore 这个指令！这个指令的选项也非常的多～您可以自行 man xfsrestore 瞧瞧！ 鸟哥在这里仅作个简单的介绍啰！</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@study ~]# xfsrestore -I &amp;lt;==用来察看备份文件数据</span><br><span class="line">[root@study ~]# xfsrestore [-f 备份文件] [-L S_label] [-s] 待复原目录 &amp;lt;==单一文件全系统复原</span><br><span class="line">[root@study ~]# xfsrestore [-f 备份文件] -r 待复原目录 &amp;lt;==通过累积备份文件来复原系统</span><br><span class="line">[root@study ~]# xfsrestore [-f 备份文件] -i 待复原目录 &amp;lt;==进入互动模式</span><br><span class="line">选项与参数：</span><br><span class="line">-I  ：跟 xfsdump 相同的输出！可查询备份数据，包括 Label 名称与备份时间等</span><br><span class="line">-f  ：后面接的就是备份文件！企业界很有可能会接 /dev/st0 等磁带机！我们这里接文件名！</span><br><span class="line">-L  ：就是 Session 的 Label name 喔！可用 -I 查询到的数据，在这个选项后输入！</span><br><span class="line">-s  ：需要接某特定目录，亦即仅复原某一个文件或目录之意！</span><br><span class="line">-r  ：如果是用文件来储存备份数据，那这个就不需要使用。如果是一个磁带内有多个文件，</span><br><span class="line">      需要这东西来达成累积复原</span><br><span class="line">-i  ：进入互动模式，进阶管理员使用的！一般我们不太需要操作它！</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>用 xfsrestore 观察 xfsdump 后的备份数据内容</li>
+</ul>
+<p>要找出 xfsdump 的内容就使用 xfsrestore -I 来查阅即可！不需要加任何参数！因为 xfsdump 与 xfsrestore 都会到 &#x2F;var&#x2F;lib&#x2F;xfsdump&#x2F;inventory&#x2F; 里面去捞数据来显示的！因此两者输出是相同的！</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[root@study ~]# xfsrestore -I </span><br><span class="line">file system 0:</span><br><span class="line">    fs id:          94ac5f77-cb8a-495e-a65b-2ef7442b837c</span><br><span class="line">    session 0:</span><br><span class="line">        mount point:    study.centos.vbird:/boot</span><br><span class="line">        device:         study.centos.vbird:/dev/vda2</span><br><span class="line">        time:           Wed Jul  1 18:43:04 2015</span><br><span class="line">        session label:  &quot;boot_all&quot;</span><br><span class="line">        session id:     418b563f-26fa-4c9b-98b7-6f57ea0163b1</span><br><span class="line">        level:          0</span><br><span class="line">                pathname:       /srv/boot.dump</span><br><span class="line">                        mfile size:     102872168</span><br><span class="line">                        media label:    &quot;boot_all&quot;</span><br><span class="line">    session 1:</span><br><span class="line">        mount point:    study.centos.vbird:/boot</span><br><span class="line">        device:         study.centos.vbird:/dev/vda2</span><br><span class="line">        time:           Wed Jul  1 18:46:21 2015</span><br><span class="line">        session label:  &quot;boot_2&quot;</span><br><span class="line">        session id:     c71d1d41-b3bb-48ee-bed6-d77c939c5ee8</span><br><span class="line">        level:          1</span><br><span class="line">                pathname:       /srv/boot.dump1</span><br><span class="line">                        mfile size:     10510952</span><br><span class="line">                        media label:    &quot;boot_2&quot;</span><br><span class="line">xfsrestore: Restore Status: SUCCESS</span><br><span class="line"><span class="meta"># </span><span class="language-bash">鸟哥已经将不重要的项目删除了，所以上面的输出是经过经简化的结果！</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">我们可以看到这个文件系统是 /boot 载点，然后有两个备份，一个 level 0 一个 level 1。</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">也看到这两个备份的数据他的内容大小！更重要的，就是那个 session label 喔！</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>简单复原 level 0 的文件系统</li>
+</ul>
+<p>先来处理一个简单的任务，就是将 &#x2F;boot 整个复原到最原本的状态～你该如何处理？其实很简单，我们只要知道想要被复原的那个文件， 以及该文件的 session label name，就可以复原啦！我们从上面的观察已经知道 level 0 的 session label 是“boot_all”啰！那整个流程是这样：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">1\. 直接将数据给它覆盖回去即可！</span></span><br><span class="line">[root@study ~]# xfsrestore -f /srv/boot.dump -L boot_all /boot</span><br><span class="line">xfsrestore: using file dump （drive_simple） strategy</span><br><span class="line">xfsrestore: version 3.1.4 （dump format 3.0） - type ^C for status and control</span><br><span class="line">xfsrestore: using online session inventory</span><br><span class="line">xfsrestore: searching media for directory dump</span><br><span class="line">xfsrestore: examining media file 0</span><br><span class="line">xfsrestore: reading directories</span><br><span class="line">xfsrestore: 8 directories and 327 entries processed</span><br><span class="line">xfsrestore: directory post-processing</span><br><span class="line">xfsrestore: restoring non-directory files</span><br><span class="line">xfsrestore: restore complete: 1 seconds elapsed</span><br><span class="line">xfsrestore: Restore Summary:</span><br><span class="line">xfsrestore:   stream 0 /srv/boot.dump OK （success）  # 是否是正确的文件啊？</span><br><span class="line">xfsrestore: Restore Status: SUCCESS</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">2\. 将备份数据在 /tmp/boot 下面解开！</span></span><br><span class="line">[root@study ~]# mkdir /tmp/boot</span><br><span class="line">[root@study ~]# xfsrestore -f /srv/boot.dump -L boot_all /tmp/boot</span><br><span class="line">[root@study ~]# du -sm /boot /tmp/boot</span><br><span class="line">109     /boot</span><br><span class="line">99      /tmp/boot</span><br><span class="line"><span class="meta"># </span><span class="language-bash">咦！两者怎么大小不一致呢？没关系！我们来检查看看！</span></span><br><span class="line"></span><br><span class="line">[root@study ~]# diff -r /boot /tmp/boot</span><br><span class="line">Only in /boot: testing.img</span><br><span class="line"><span class="meta"># </span><span class="language-bash">看吧！原来是 /boot 我们有增加过一个文件啦！</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">3\. 仅复原备份文件内的 grub2 到 /tmp/boot2/ 里头去！</span></span><br><span class="line">[root@study ~]# mkdir /tmp/boot2</span><br><span class="line">[root@study ~]# xfsrestore -f /srv/boot.dump -L boot_all -s grub2 /tmp/boot2</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>复原累积备份数据</li>
+</ul>
+<p>其实复原累积备份与复原单一文件系统相似耶！如果备份数据是由 level 0 -&gt; level 1 -&gt; level 2… 去进行的， 当然复原就得要相同的流程来复原！因此当我们复原了 level 0 之后，接下来当然就要复原 level 1 到系统内啊！ 我们可以前一个案例复原 &#x2F;tmp&#x2F;boot 的情况来继续往下处理：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">继续复原 level 1 到 /tmp/boot 当中！</span></span><br><span class="line">[root@study ~]# xfsrestore -f /srv/boot.dump1 /tmp/boot</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>仅还原部分文件的 xfsrestore 互动模式</li>
+</ul>
+<p>刚刚的 -s 可以接部份数据来还原，但是…如果我就根本不知道备份文件里面有啥文件，那该如何选择啊？用猜的喔？ 又如果要复原的文件数量太多时，用 -s 似乎也是笨笨的～那怎办？有没有比较好的方式呢？有的，就通过 -i 这个互动界面吧！ 举例来说，我们想要知道 level 0 的备份数据里面有哪些东西，然后再少量的还原回来的话！</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">1\. 先进入备份文件内，准备找出需要备份的文件名数据，同时预计还原到 /tmp/boot3 当中！</span></span><br><span class="line">[root@study ~]# mkdir /tmp/boot3</span><br><span class="line">[root@study ~]# xfsrestore -f /srv/boot.dump -i /tmp/boot3</span><br><span class="line"> ========================== subtree selection dialog ==========================</span><br><span class="line"></span><br><span class="line">the following commands are available:</span><br><span class="line">        pwd</span><br><span class="line">        ls [ &amp;lt;path&amp;gt; ]</span><br><span class="line">        cd [ &amp;lt;path&amp;gt; ]</span><br><span class="line">        add [ &amp;lt;path&amp;gt; ]       # 可以加入复原文件列表中</span><br><span class="line">        delete [ &amp;lt;path&amp;gt; ]    # 从复原列表拿掉文件名！并非删除喔！</span><br><span class="line">        extract              # 开始复原动作！</span><br><span class="line">        quit</span><br><span class="line">        help</span><br><span class="line"></span><br><span class="line"> -&amp;gt; ls</span><br><span class="line">          455517 initramfs-3.10.0-229.el7.x86_64kdump.img</span><br><span class="line">             138 initramfs-3.10.0-229.el7.x86_64.img</span><br><span class="line">             141 initrd-plymouth.img</span><br><span class="line">             140 vmlinuz-0-rescue-309eb890d09f440681f596543d95ec7a</span><br><span class="line">             139 initramfs-0-rescue-309eb890d09f440681f596543d95ec7a.img</span><br><span class="line">             137 vmlinuz-3.10.0-229.el7.x86_64</span><br><span class="line">             136 symvers-3.10.0-229.el7.x86_64.gz</span><br><span class="line">             135 config-3.10.0-229.el7.x86_64</span><br><span class="line">             134 System.map-3.10.0-229.el7.x86_64</span><br><span class="line">             133 .vmlinuz-3.10.0-229.el7.x86_64.hmac</span><br><span class="line">         1048704 grub2/</span><br><span class="line">             131 grub/</span><br><span class="line"></span><br><span class="line"> -&amp;gt; add grub</span><br><span class="line"> -&amp;gt; add grub2</span><br><span class="line"> -&amp;gt; add config-3.10.0-229.el7.x86_64</span><br><span class="line"> -&amp;gt; extract</span><br><span class="line"></span><br><span class="line">[root@study ~]# ls -l /tmp/boot3</span><br><span class="line">-rw-r--r--. 1 root root 123838 Mar  6 19:45 config-3.10.0-229.el7.x86_64</span><br><span class="line">drwxr-xr-x. 2 root root     26 May  4 17:52 grub</span><br><span class="line">drwxr-xr-x. 6 root root    104 Jun 25 00:02 grub2</span><br><span class="line"><span class="meta"># </span><span class="language-bash">就只会有 3 个文件名被复原，当然，如果文件名是目录，那下面的子文件当然也会被还原回来的！</span></span><br></pre></td></tr></table></figure>
+
+<p>事实上，这个 -i 是很有帮助的一个项目！可以从备份文件里面找出你所需要的数据来复原！相当有趣！当然啦， 如果你已经知道文件名，使用 -s 不需要进入备份文件就能够处理掉这部份了！</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://oushaohua.github.io/2022/06/24/linux%E7%A3%81%E7%9B%98%E4%B8%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2935,158 +3145,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://oushaohua.github.io/2022/02/19/%E5%85%A5%E8%81%8C%E5%89%8D%E6%8E%A8%E8%8D%90%E5%AD%A6%E4%B9%A0%E5%86%85%E5%AE%B9%E6%B8%85%E5%8D%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaoou">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaoou">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/02/19/%E5%85%A5%E8%81%8C%E5%89%8D%E6%8E%A8%E8%8D%90%E5%AD%A6%E4%B9%A0%E5%86%85%E5%AE%B9%E6%B8%85%E5%8D%95/" class="post-title-link" itemprop="url">入职前推荐学习内容清单</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-02-19 15:05:03 / 修改时间：15:09:04" itemprop="dateCreated datePublished" datetime="2022-02-19T15:05:03+08:00">2022-02-19</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <table>
-<thead>
-<tr>
-<th>学习内容</th>
-<th>目标</th>
-<th>预计耗时</th>
-<th>优先级</th>
-<th>参考文献</th>
-<th>学习内容</th>
-<th>检查方式</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>建立个人学习页面</td>
-<td>更新个人学习笔记</td>
-<td>5天</td>
-<td>高</td>
-<td>参考：<a target="_blank" rel="noopener" href="https://tristawwp.github.io/">https://tristawwp.github.io</a></td>
-<td>建立个人博客，同步学习内容、进度和问题；顺带学习版本管理的知识。</td>
-<td>每两周输出一次学习报告</td>
-</tr>
-<tr>
-<td>python基础知识</td>
-<td>python基础语法及常用技巧</td>
-<td>20天</td>
-<td>高</td>
-<td>《python编程从入门到实践》</td>
-<td>学习重点：<br/>1、字符串、列表、字典及元组<br/>2、条件和循环<br/>3、函数和模块<br/>4、面向对象编程<br/>5、错误和异常等</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>python集成开发环境IDE，如Pycharm</td>
-<td></td>
-<td></td>
-<td></td>
-<td>熟悉python的执行环境，掌握使用IDE调试python脚本的方法</td>
-<td></td>
-</tr>
-<tr>
-<td>软件测试理论及工具</td>
-<td>1、学习软件工程思想<br/>2、学习基本的测试理论</td>
-<td>15天</td>
-<td>高</td>
-<td>《软件测试设计》<br/>《软件测试的艺术》</td>
-<td>1、常见的软件开发模型、软件质量度量指标以及方法<br/>2、测试阶段的划分及组织形式<br/>1）静态分析：检查工具及检查规则<br/>2）文档审查<br/>3）代码审查<br/>4）单元测试：语句覆盖、分支覆盖、判断覆盖、MCDC覆盖<br/>5）部件测试：自底向上、自顶向下、三明治集成测试，了解桩和驱动函数<br/>6）集成测试：测试类型（功能、性能、接口等）和测试方法（功能分解、等价类、边界值等）<br/>7）系统测试<br/>8）验收测试</td>
-<td></td>
-</tr>
-<tr>
-<td>Linux系统熟悉</td>
-<td>熟悉Linux系统（Ubuntu）的基本操作</td>
-<td>5天</td>
-<td>中</td>
-<td>《鸟哥的Linux私房菜》基础篇<br/><a target="_blank" rel="noopener" href="http://cn.linux.vbird.org/linux_basic/linux_basic.php">http://cn.linux.vbird.org/linux_basic/linux_basic.php</a></td>
-<td>掌握Linux系统下的文件权限与目录配置，文件与目录管理、磁盘与文件系统管理、文件压缩打包等内容</td>
-<td></td>
-</tr>
-<tr>
-<td>版本管理工具学习</td>
-<td>git工具学习</td>
-<td>3天</td>
-<td>中</td>
-<td>廖雪峰git教程<br/><a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/896043488029600">https://www.liaoxuefeng.com/wiki/896043488029600</a></td>
-<td>掌握git的使用，包括clone，add，commit，push，pull，diff，log，checkout，cherry-pick等</td>
-<td></td>
-</tr>
-<tr>
-<td>大疆产品了解</td>
-<td>了解大疆产品的基本功能</td>
-<td>3天</td>
-<td>中</td>
-<td>大疆官网相关产品介绍</td>
-<td>关注的机型可以有：<br/>1、Mavic 3<br/>2、T40 农业植保机<br/>3、经纬M300 RTK</td>
-<td></td>
-</tr>
-<tr>
-<td>入职分享</td>
-<td>个人分享PPT制作</td>
-<td>5天</td>
-<td>中</td>
-<td></td>
-<td>内容包括但不限于：自我介绍（包括教育背景、过往工作履历、项目经历），毕业设计、自我评价、目标与未来等</td>
-<td></td>
-</tr>
-<tr>
-<td>C语言学习</td>
-<td>学习C语言基础</td>
-<td>10天</td>
-<td>低</td>
-<td>《C Primer Plus》</td>
-<td>学习重点：<br/>1、字符串和格式化输入输出<br/>2、运算符、表达式和语句<br/>3、循环、分支和跳转<br/>4、函数<br/>5、数组和指针<br/>6、字符串处理函数<br/>7、存储类、作用域、内存管理<br/>8、预处理器和常用库函数</td>
-<td></td>
-</tr>
-</tbody></table>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -3156,7 +3214,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">12</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
