@@ -170,7 +170,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-06-24 21:44:12 / 修改时间：22:05:08" itemprop="dateCreated datePublished" datetime="2022-06-24T21:44:12+08:00">2022-06-24</time>
+              <time title="创建时间：2022-06-24 21:44:12 / 修改时间：22:08:28" itemprop="dateCreated datePublished" datetime="2022-06-24T21:44:12+08:00">2022-06-24</time>
             </span>
 
           
@@ -336,6 +336,23 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">1\. 先进入备份文件内，准备找出需要备份的文件名数据，同时预计还原到 /tmp/boot3 当中！</span></span><br><span class="line">[root@study ~]# mkdir /tmp/boot3</span><br><span class="line">[root@study ~]# xfsrestore -f /srv/boot.dump -i /tmp/boot3</span><br><span class="line"> ========================== subtree selection dialog ==========================</span><br><span class="line"></span><br><span class="line">the following commands are available:</span><br><span class="line">        pwd</span><br><span class="line">        ls [ &amp;lt;path&amp;gt; ]</span><br><span class="line">        cd [ &amp;lt;path&amp;gt; ]</span><br><span class="line">        add [ &amp;lt;path&amp;gt; ]       # 可以加入复原文件列表中</span><br><span class="line">        delete [ &amp;lt;path&amp;gt; ]    # 从复原列表拿掉文件名！并非删除喔！</span><br><span class="line">        extract              # 开始复原动作！</span><br><span class="line">        quit</span><br><span class="line">        help</span><br><span class="line"></span><br><span class="line"> -&amp;gt; ls</span><br><span class="line">          455517 initramfs-3.10.0-229.el7.x86_64kdump.img</span><br><span class="line">             138 initramfs-3.10.0-229.el7.x86_64.img</span><br><span class="line">             141 initrd-plymouth.img</span><br><span class="line">             140 vmlinuz-0-rescue-309eb890d09f440681f596543d95ec7a</span><br><span class="line">             139 initramfs-0-rescue-309eb890d09f440681f596543d95ec7a.img</span><br><span class="line">             137 vmlinuz-3.10.0-229.el7.x86_64</span><br><span class="line">             136 symvers-3.10.0-229.el7.x86_64.gz</span><br><span class="line">             135 config-3.10.0-229.el7.x86_64</span><br><span class="line">             134 System.map-3.10.0-229.el7.x86_64</span><br><span class="line">             133 .vmlinuz-3.10.0-229.el7.x86_64.hmac</span><br><span class="line">         1048704 grub2/</span><br><span class="line">             131 grub/</span><br><span class="line"></span><br><span class="line"> -&amp;gt; add grub</span><br><span class="line"> -&amp;gt; add grub2</span><br><span class="line"> -&amp;gt; add config-3.10.0-229.el7.x86_64</span><br><span class="line"> -&amp;gt; extract</span><br><span class="line"></span><br><span class="line">[root@study ~]# ls -l /tmp/boot3</span><br><span class="line">-rw-r--r--. 1 root root 123838 Mar  6 19:45 config-3.10.0-229.el7.x86_64</span><br><span class="line">drwxr-xr-x. 2 root root     26 May  4 17:52 grub</span><br><span class="line">drwxr-xr-x. 6 root root    104 Jun 25 00:02 grub2</span><br><span class="line"><span class="meta"># </span><span class="language-bash">就只会有 3 个文件名被复原，当然，如果文件名是目录，那下面的子文件当然也会被还原回来的！</span></span><br></pre></td></tr></table></figure>
 
 <p>事实上，这个 -i 是很有帮助的一个项目！可以从备份文件里面找出你所需要的数据来复原！相当有趣！当然啦， 如果你已经知道文件名，使用 -s 不需要进入备份文件就能够处理掉这部份了！</p>
+<h2 id="重点回顾"><a href="#重点回顾" class="headerlink" title="重点回顾"></a>重点回顾</h2><ul>
+<li>压缩指令为通过一些运算方法去将原本的文件进行压缩，以减少文件所占用的磁盘容量。 压缩前与压缩后的文件所占用的磁盘容量比值， 就可以被称为是“压缩比”</li>
+<li>压缩的好处是可以减少磁盘容量的浪费，在 WWW 网站也可以利用文件压缩的技术来进行数据的传送，好让网站带宽的可利用率上升喔</li>
+<li>压缩文件的扩展名大多是：“*.gz,* .bz2, <em>.xz,</em> .tar, <em>.tar.gz,</em> .tar.bz2, *.tar.xz”</li>
+<li>常见的压缩指令有 gzip, bzip2, xz。压缩率最佳的是 xz，若可以不计时间成本，建议使用 xz 进行压缩。</li>
+<li>tar 可以用来进行文件打包，并可支持 gzip, bzip2, xz 的压缩。</li>
+<li>压　缩：tar -Jcv -f filename.tar.xz 要被压缩的文件或目录名称</li>
+<li>查　询：tar -Jtv -f filename.tar.xz</li>
+<li>解压缩：tar -Jxv -f filename.tar.xz -C 欲解压缩的目录</li>
+<li>xfsdump 指令可备份文件系统或单一目录</li>
+<li>xfsdump 的备份若针对文件系统时，可进行 0-9 的 level 差异备份！其中 level 0 为完整备份；</li>
+<li>xfsrestore 指令可还原被 xfsdump 创建的备份文件；</li>
+<li>要创建光盘烧录数据时，可通过 mkisofs 指令来创建；</li>
+<li>可通过 wodim 来写入 CD 或 DVD 烧录机</li>
+<li>dd 可备份完整的 partition 或 disk ，因为 dd 可读取磁盘的 sector 表面数据</li>
+<li>cpio 为相当优秀的备份指令，不过必须要搭配类似 find 指令来读入欲备份的文件名数据，方可进行备份动作。</li>
+</ul>
 
       
     </div>
