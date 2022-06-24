@@ -170,7 +170,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-06-24 15:32:30 / 修改时间：21:37:54" itemprop="dateCreated datePublished" datetime="2022-06-24T15:32:30+08:00">2022-06-24</time>
+              <time title="创建时间：2022-06-24 15:32:30 / 修改时间：21:41:46" itemprop="dateCreated datePublished" datetime="2022-06-24T15:32:30+08:00">2022-06-24</time>
             </span>
 
           
@@ -771,6 +771,40 @@
 
 <p>当你使用 ls -l 去查询某个目录下的数据时，第一行都会出现一个“total”的字样！ 那是啥东西？其实那就是该目录下的所有数据所耗用的实际 block 数量 * block 大小的值。 </p>
 <p>从上面的特殊字体部分，那就是每个文件所使用掉 block 的容量！举例来说，那个 crontab 虽然仅有 451Bytes ， 不过他却占用了整个 block （每个 block 为 4K），所以将所有的文件的所有的 block 加总就得到 12KBytes 那个数值了。 如果计算每个文件实际容量的加总结果，其实只有不到 5K 而已。</p>
+<h3 id="利用-GNU-的-parted-进行分区行为（Optional）"><a href="#利用-GNU-的-parted-进行分区行为（Optional）" class="headerlink" title="利用 GNU 的 parted 进行分区行为（Optional）"></a>利用 GNU 的 parted 进行分区行为（Optional）</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[root@study ~]# parted [设备] [指令 [参数]]</span><br><span class="line">选项与参数：</span><br><span class="line">指令功能：</span><br><span class="line">          新增分区：mkpart [primary&amp;#124;logical&amp;#124;extended] [ext4&amp;#124;vfat&amp;#124;xfs] 开始 结束</span><br><span class="line">          显示分区：print</span><br><span class="line">          删除分区：rm [partition]</span><br><span class="line"></span><br><span class="line">范例一：以 parted 列出目前本机的分区表数据</span><br><span class="line">[root@study ~]# parted /dev/vda print</span><br><span class="line">Model: Virtio Block Device （virtblk）         &amp;lt;==磁盘接口与型号</span><br><span class="line">Disk /dev/vda: 42.9GB                        &amp;lt;==磁盘文件名与容量</span><br><span class="line">Sector size （logical/physical）: 512B/512B    &amp;lt;==每个扇区的大小</span><br><span class="line">Partition Table: gpt                         &amp;lt;==是 GPT 还是 MBR 分区</span><br><span class="line">Disk Flags: pmbr_boot</span><br><span class="line"></span><br><span class="line">Number  Start   End     Size    File system     Name                  Flags</span><br><span class="line"> 1      1049kB  3146kB  2097kB                                        bios_grub</span><br><span class="line"> 2      3146kB  1077MB  1074MB  xfs</span><br><span class="line"> 3      1077MB  33.3GB  32.2GB                                        lvm</span><br><span class="line"> 4      33.3GB  34.4GB  1074MB  xfs             Linux filesystem</span><br><span class="line"> 5      34.4GB  35.4GB  1074MB  ext4            Microsoft basic data</span><br><span class="line"> 6      35.4GB  36.0GB  537MB   linux-swap（v1）  Linux swap</span><br><span class="line">[  1 ]  [  2 ]  [  3  ] [  4  ] [  5  ]         [  6  ]</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>Number：这个就是分区的号码啦！举例来说，1号代表的是 &#x2F;dev&#x2F;vda1 的意思；</li>
+<li>Start：分区的起始位置在这颗磁盘的多少 MB 处？有趣吧！他以容量作为单位喔！</li>
+<li>End：此分区的结束位置在这颗磁盘的多少 MB 处？</li>
+<li>Size：由上述两者的分析，得到这个分区有多少容量；</li>
+<li>File system：分析可能的文件系统类型为何的意思！</li>
+<li>Name：就如同 gdisk 的 System ID 之意。</li>
+</ol>
+<h2 id="重点回顾"><a href="#重点回顾" class="headerlink" title="重点回顾"></a>重点回顾</h2><ul>
+<li>一个可以被挂载的数据通常称为“文件系统, filesystem”而不是分区 （partition） 喔！</li>
+<li>基本上 Linux 的传统文件系统为 Ext2 ，该文件系统内的信息主要有：<ul>
+<li>superblock：记录此 filesystem 的整体信息，包括inode&#x2F;block的总量、使用量、剩余量， 以及文件系统的格式与相关信息等；</li>
+<li>inode：记录文件的属性，一个文件占用一个inode，同时记录此文件的数据所在的 block 号码；</li>
+<li>block：实际记录文件的内容，若文件太大时，会占用多个 block 。</li>
+</ul>
+</li>
+<li>Ext2 文件系统的数据存取为索引式文件系统（indexed allocation）</li>
+<li>需要磁盘重组的原因就是文件写入的 block 太过于离散了，此时文件读取的性能将会变的很差所致。 这个时候可以通过磁盘重组将同一个文件所属的 blocks 汇整在一起。</li>
+<li>Ext2文件系统主要有：boot sector, superblock, inode bitmap, block bitmap, inode table, data block 等六大部分。</li>
+<li>data block 是用来放置文件内容数据地方，在 Ext2 文件系统中所支持的 block 大小有 1K, 2K 及 4K 三种而已</li>
+<li>inode 记录文件的属性&#x2F;权限等数据，其他重要项目为： 每个 inode 大小均为固定，有 128&#x2F;256Bytes 两种基本容量。每个文件都仅会占用一个 inode 而已； 因此文件系统能够创建的文件数量与 inode 的数量有关；</li>
+<li>文件的 block 在记录文件的实际数据，目录的 block 则在记录该目录下面文件名与其 inode 号码的对照表；</li>
+<li>日志式文件系统 （journal） 会多出一块记录区，随时记载文件系统的主要活动，可加快系统复原时间；</li>
+<li>Linux 文件系统为增加性能，会让内存作为大量的磁盘高速缓存；</li>
+<li>实体链接只是多了一个文件名对该 inode 号码的链接而已；</li>
+<li>符号链接就类似Windows的捷径功能。</li>
+<li>磁盘的使用必需要经过：分区、格式化与挂载，分别惯用的指令为：gdisk, mkfs, mount三个指令</li>
+<li>分区时，应使用 parted 检查分区表格式，再判断使用 fdisk&#x2F;gdisk 来分区，或直接使用 parted 分区</li>
+<li>为了考虑性能，XFS 文件系统格式化时，可以考虑加上 agcount&#x2F;su&#x2F;sw&#x2F;extsize 等参数较佳</li>
+<li>如果磁盘已无未分区的容量，可以考虑使用大型文件取代磁盘设备的处理方式，通过 dd 与格式化功能。</li>
+<li>开机自动挂载可参考&#x2F;etc&#x2F;fstab之设置，设置完毕务必使用 mount -a 测试语法正确否；</li>
+</ul>
 
       
     </div>
