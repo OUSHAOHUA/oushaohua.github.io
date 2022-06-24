@@ -145,6 +145,528 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://oushaohua.github.io/2022/06/23/linux%E7%B3%BB%E7%BB%9F%E7%86%9F%E6%82%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaoou">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaoou">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/06/23/linux%E7%B3%BB%E7%BB%9F%E7%86%9F%E6%82%89/" class="post-title-link" itemprop="url">未命名</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-06-23 22:23:31" itemprop="dateCreated datePublished" datetime="2022-06-23T22:23:31+08:00">2022-06-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-06-24 11:12:10" itemprop="dateModified" datetime="2022-06-24T11:12:10+08:00">2022-06-24</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="linux文件权限与目录配置"><a href="#linux文件权限与目录配置" class="headerlink" title="linux文件权限与目录配置"></a>linux文件权限与目录配置</h1><p>Linux是个多用户、多任务的系统，对于每个文件都具有文件所有者（user），用户组（group）和其他用户（Others）3种身份的个别权限，每个账号可以有多个用户组。</p>
+<p>而root具有最高的权限，是Linux的管理员账号。</p>
+<p>在Linux系统中，默认的情况下所有系统上的账号与一般身份用户，还有root的信息，都是记录在&#x2F;etc&#x2F;passwd这个文件内。至于个人的密码则是记录在&#x2F;etc&#x2F;shadow这个文件下。此外，linux所有的组名都记录在&#x2F;etc&#x2F;group内。</p>
+<h4 id="linux的文件属性"><a href="#linux的文件属性" class="headerlink" title="linux的文件属性"></a>linux的文件属性</h4><p><img src="https://segmentfault.com/img/bVbA0XO" alt="image.png"></p>
+<ul>
+<li>第一列代表这个文件的类型与权限</li>
+</ul>
+<p>第一个字符代表这个文件是目录、文件或者链接文件等。<br>若是【d】代表目录<br>若是【-】代表文件<br>若是【l】代表连接文件<br>若是【b】代表设备文件里面可供存储的接口设备<br>若是【c】代表设备文件里面的串行端口设备，例如键盘、鼠标（一次性读取设备）<br>接下来的字符，以3个为一组，均为“rwx”的3个参数组合。其中【r】代表可读，【w】代表可写，【x】代表可执行。3个权限的位置不会改变，如果没有权限则会出现【-】号。<br>第一组为文件所有者权限<br>第二组为同用户组权限<br>第三组为其他非本用户组的权限</p>
+<ul>
+<li>第二列表示有多少文件名连接到此节点</li>
+<li>第三列表示这个文件（或目录）的所有者账号</li>
+<li>第四列表示这个文件的所属用户组。一个账号是可以附属于一个多多个用户组。</li>
+<li>第五列为这个文件的容量大小，默认单位为B.</li>
+<li>第六列为这个文件的创建日期或者是最近的修改日期</li>
+</ul>
+<p>这一列的内容为日期（月&#x2F;日）及时间，如果这个文件被修改的时间距离现在太久了，那么时间部分会仅显示年份而已。<br>如果想要显示完整的时间，可以使用“–full-tiem”参数来查看</p>
+<p><strong><img src="https://segmentfault.com/img/bVbA0Z1" alt="full-time参数.png"></strong></p>
+<p>如果系统是以简体中文安装，那么日期字段会以中文来显示，但是中文没有办法在纯文本的终端模式正确显示，此栏可能会变成乱码，如果修改配置文件，以ubuntu为例，把“&#x2F;etc&#x2F;default&#x2F;locale”的LANG变量修改为：LANG&#x3D;”en_US.UTF-8”</p>
+<ul>
+<li>第七列就是该文件名</li>
+</ul>
+<p>如果文件名带着“.”，则代表该文件为隐藏文件，可以使用“ls -a”来显示所有的隐藏文件。要看ls的更多参数，可以使用“man ls”或者“info ls”来查看其基本用法。</p>
+<p><strong>对于文件夹的权限，如果用户要进入目录，那么用户对应的权限一定至少要具有可读可执行（r-x）</strong></p>
+<h4 id="如何改变文件属性和权限"><a href="#如何改变文件属性和权限" class="headerlink" title="如何改变文件属性和权限"></a>如何改变文件属性和权限</h4><p>常用于用户组、所有者、各种身份的权限修改的命令有：</p>
+<ul>
+<li>chgrp: 更改文件所属用户组</li>
+<li>chown: 更改文件所有者</li>
+<li>chmod：改变文件的权限</li>
+</ul>
+<h5 id="改变所属用户组：chgrp"><a href="#改变所属用户组：chgrp" class="headerlink" title="改变所属用户组：chgrp"></a>改变所属用户组：chgrp</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$ </span><span class="language-bash"><span class="built_in">chgrp</span> 用户组 [-R] <span class="built_in">dirname</span>/filename</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">-R 代表进行递归的持续更改，连同子目录下的所有文件、目录</span></span><br></pre></td></tr></table></figure>
+
+<p>注意，更改的用户组一定是&#x2F;etc&#x2F;group中存在的，否则会提示错误</p>
+<h5 id="改变文件所有者：chown"><a href="#改变文件所有者：chown" class="headerlink" title="改变文件所有者：chown"></a>改变文件所有者：chown</h5><p>chown除了更改所有者，还可以更改文件的用户组</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$ </span><span class="language-bash"><span class="built_in">chown</span> 所有者 [-R] <span class="built_in">dirname</span>/filename</span></span><br><span class="line"><span class="meta">$ </span><span class="language-bash"><span class="built_in">chown</span> 所有者:用户组 [-R] <span class="built_in">dirname</span>/filename</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">-R 代表进行递归的持续更改，连同子目录下的所有文件、目录</span></span><br></pre></td></tr></table></figure>
+
+<p>注意更改的所有者一定要在&#x2F;etc&#x2F;passwd这个文件中记录的用户名称。</p>
+<p>这两个命令常用在复制文件后，要把复制的文件给予其他用户</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$</span> <span class="built_in">cp</span> 源文件 目标文件</span><br><span class="line"><span class="comment"># 复制后，查看文件的用户用户组发现与原来的文件一致，可以修改为其他用户</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>改变权限：chmod</strong><br>文件权限的改变使用的是chmod命令，但是文件权限可以使用数字或者符号来进行权限更改。<br>（1）数字类型改变权限<br>可读可写可执行分别代表不同的数字，<br>r: 4<br>w: 2<br>x: 1<br>每种身份各自的3个权限需要累加，例如：【-rwxr-xr–】代表<br>owner &#x3D; rwx &#x3D; 4+2+1 &#x3D; 7<br>group &#x3D; r-x &#x3D; 4+0+1 &#x3D; 5<br>other &#x3D; r– &#x3D; 4+0+0 &#x3D; 4<br>所以该文件的权限数字为754，更改权限命令的语法为：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$ </span><span class="language-bash"><span class="built_in">chmod</span> [-R] xyz 文件或目录</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">其中xyz为上面的数字类型的权限属性</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">-R 为递归的持续更改，连同子目录下的所有文件都会被更改</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>符号类型改变文件权限</strong><br>我们用u，g，o分别代表user，group和other，a代表全部的身份all，那么读写的权限可以写成r，w，x，那么命令格式可以是：</p>
+<p><img src="https://segmentfault.com/img/bVbA07H" alt="image.png"></p>
+<p>相应的例子如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">要设置权限为<span class="string">&#x27;-rwxr-xr-x&#x27;</span></span></span><br><span class="line"><span class="meta">$ </span><span class="language-bash"><span class="built_in">chmod</span> u=rwx,go=rx testfile</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">要设置权限为<span class="string">&#x27;-rwxr-xr--&#x27;</span></span></span><br><span class="line"><span class="meta">$ </span><span class="language-bash"><span class="built_in">chmod</span> u=rwx,g=rx,o=r testfile</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">如果我们原先不知道文件的权限，只想给每个人均可以写入的权限</span></span><br><span class="line"><span class="meta">$ </span><span class="language-bash"><span class="built_in">chmod</span> a+w testfile</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">如果要把某个权限去掉而不更改其他属性，例如去掉每个人的可执行权限</span></span><br><span class="line"><span class="meta">$ </span><span class="language-bash"><span class="built_in">chmod</span> a-w testfile</span></span><br></pre></td></tr></table></figure>
+
+<p>有一些特殊权限需要注意的，例如<br>要对目录可以进行浏览，至少要有r和x的权限。<br>对于属于用户testuser本身的目录，即使在该目录下的某个文件对于testuser来说并没有拥有任何权限，但用户testuser还是对这个文件具有rwx权限。例如</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$ </span><span class="language-bash">sudo su</span></span><br><span class="line"><span class="meta">$ </span><span class="language-bash"><span class="built_in">cd</span> /tmp</span></span><br><span class="line"><span class="meta">$ </span><span class="language-bash"><span class="built_in">mkdir</span> testing</span></span><br><span class="line"><span class="meta">$ </span><span class="language-bash"><span class="built_in">chmod</span> 744 testing</span></span><br><span class="line"><span class="meta">$ </span><span class="language-bash"><span class="built_in">chmod</span> 644 testing/testing</span> </span><br><span class="line"><span class="meta">$ </span><span class="language-bash"><span class="built_in">ls</span> -ald testing testing/testing</span> </span><br><span class="line"><span class="meta"># </span><span class="language-bash">显示结果如下</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">drwxr--r-- 2 root root 4096 Dec  2 16:28 testing</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">-rw-r--r-- 1 root root    0 Dec  2 16:28 testing/testing</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">这时候我们切换其他用户，</span></span><br><span class="line"><span class="meta">$ </span><span class="language-bash">su vagrant</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">再去查看testing目录，由于没有x权限，所以无法查看，也无法进入</span></span><br><span class="line"><span class="meta">$ </span><span class="language-bash"><span class="built_in">ls</span> -l tesing/</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash"><span class="built_in">ls</span>: cannot access testing/testing: Permission denied</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">total 0</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">-????????? ? ? ? ?            ? testing</span></span><br><span class="line"><span class="meta">$ </span><span class="language-bash"><span class="built_in">cd</span> testing/</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">bash: <span class="built_in">cd</span>: testing/: Permission denied</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">然后我们如果把文件夹变成vagrant用户，则可以删掉testing/testing</span></span><br><span class="line"><span class="meta">$ </span><span class="language-bash">sudo su</span></span><br><span class="line"><span class="meta">$ </span><span class="language-bash"><span class="built_in">chown</span> vagrant testing</span></span><br><span class="line"><span class="meta">$ </span><span class="language-bash"><span class="built_in">cd</span> /tmp/testing/</span></span><br><span class="line"><span class="meta">$ </span><span class="language-bash"><span class="built_in">rm</span> testing</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">最后删除成功了，即使testing/testing目录没有对vagrant用户开放可写可执行权限</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="Linux目录配置"><a href="#Linux目录配置" class="headerlink" title="Linux目录配置"></a>Linux目录配置</h1><p>Linux目录配置遵循FHS(Filesystem Hierarchy Standard)标准。目录树如下：</p>
+<p><img src="http://shouce.jb51.net/vbird-linux-basic-4/img/centos7_0210filepermission_4.jpg" alt="目录树架构示意图"></p>
+<p>根据FHS[<a target="_blank" rel="noopener" href="http://shouce.jb51.net/vbird-linux-basic-4/44.html#ps2">2]</a>的标准文件指出，他们的主要目的是希望让使用者可以了解到已安装软件通常放置于那个目录下， 所以他们希望独立的软件开发商、操作系统制作者、以及想要维护系统的使用者，都能够遵循FHS的标准。 也就是说，FHS的重点在于规范每个特定的目录下应该要放置什么样子的数据而已。 这样做好处非常多，因为Linux操作系统就能够在既有的面貌下（目录架构不变）发展出开发者想要的独特风格。</p>
+<p>事实上，FHS是根据过去的经验一直再持续的改版的，FHS依据文件系统使用的频繁与否与是否允许使用者随意更动， 而将目录定义成为四种交互作用的形态，用表格来说有点像下面这样：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>可分享的（shareable）</th>
+<th>不可分享的（unshareable）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>不变的（static）</td>
+<td>&#x2F;usr （软件放置处）</td>
+<td>&#x2F;etc （配置文件）</td>
+</tr>
+<tr>
+<td>&#x2F;opt （第三方协力软件）</td>
+<td>&#x2F;boot （开机与核心档）</td>
+<td></td>
+</tr>
+<tr>
+<td>可变动的（variable）</td>
+<td>&#x2F;var&#x2F;mail （使用者邮件信箱）</td>
+<td>&#x2F;var&#x2F;run （程序相关）</td>
+</tr>
+<tr>
+<td>&#x2F;var&#x2F;spool&#x2F;news （新闻群组）</td>
+<td>&#x2F;var&#x2F;lock （程序相关）</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>上表中的目录就是一些代表性的目录，该目录下面所放置的数据在下面会谈到，这里先略过不谈。 我们要了解的是，什么是那四个类型？</p>
+<ul>
+<li>可分享的：可以分享给其他系统挂载使用的目录，所以包括可执行文件与使用者的邮件等数据， 是能够分享给网络上其他主机挂载用的目录；</li>
+<li>不可分享的：自己机器上面运行的设备文件或者是与程序有关的socket文件等， 由于仅与自身机器有关，所以当然就不适合分享给其他主机了。</li>
+<li>不变的：有些数据是不会经常变动的，跟随着distribution而不变动。 例如函数库、文件说明文档、系统管理员所管理的主机服务配置文件等等；</li>
+<li>可变动的：经常改变的数据，例如登录文件、一般用户可自行收受的新闻群组等。</li>
+</ul>
+<p>事实上，FHS针对目录树架构仅定义出三层目录下面应该放置什么数据而已，分别是下面这三个目录的定义：</p>
+<ul>
+<li>&#x2F; （root, 根目录）：与开机系统有关；</li>
+<li>&#x2F;usr （unix software resource）：与软件安装&#x2F;执行有关；</li>
+<li>&#x2F;var （variable）：与系统运行过程有关。</li>
+</ul>
+<p><strong>Tips</strong> 这个 root 在 Linux 里面的意义真的很多很多。 如果以“帐号”的角度来看，所谓的 root 指的是“系统管理员！”的身份， 如果以“目录”的角度来看，所谓的 root 意即指的是根目录，就是 &#x2F; 。</p>
+<ul>
+<li>根目录 （&#x2F;） 的意义与内容：</li>
+</ul>
+<p>根目录是整个系统最重要的一个目录，因为不但所有的目录都是由根目录衍生出来的，同时根目录也与开机&#x2F;还原&#x2F;系统修复等动作有关。 由于系统开机时需要特定的开机软件、核心文件、开机所需程序、函数库等等文件数据，若系统出现错误时，根目录也必须要包含有能够修复文件系统的程序才行。 因为根目录是这么的重要，所以在FHS的要求方面，他希望根目录不要放在非常大的分区内， 因为越大的分区你会放入越多的数据，如此一来根目录所在分区就可能会有较多发生错误的机会。</p>
+<p>因此FHS标准建议：根目录（&#x2F;）所在分区应该越小越好， 且应用程序所安装的软件最好不要与根目录放在同一个分区内，保持根目录越小越好。 如此不但性能较佳，根目录所在的文件系统也较不容易发生问题。</p>
+<p>有鉴于上述的说明，因此FHS定义出根目录（&#x2F;）下面应该要有下面这些次目录的存在才好，即使没有实体目录，FHS也希望至少有链接文件存在才好：</p>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>应放置文件内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>第一部份：FHS 要求必须要存在的目录</td>
+<td></td>
+</tr>
+<tr>
+<td>&#x2F;bin</td>
+<td>系统有很多放置可执行文件的目录，但&#x2F;bin比较特殊。因为&#x2F;bin放置的是在单人维护模式下还能够被操作的指令。 在&#x2F;bin下面的指令可以被root与一般帐号所使用，主要有：cat, chmod, chown, date, mv, mkdir, cp, bash等等常用的指令。</td>
+</tr>
+<tr>
+<td>&#x2F;boot</td>
+<td>这个目录主要在放置开机会使用到的文件，包括Linux核心文件以及开机菜单与开机所需配置文件等等。 Linux kernel常用的文件名为：vmlinuz，如果使用的是grub2这个开机管理程序， 则还会存在&#x2F;boot&#x2F;grub2&#x2F;这个目录喔！</td>
+</tr>
+<tr>
+<td>&#x2F;dev</td>
+<td>在Linux系统上，任何设备与周边设备都是以文件的型态存在于这个目录当中的。 你只要通过存取这个目录下面的某个文件，就等于存取某个设备，比要重要的文件有&#x2F;dev&#x2F;null, &#x2F;dev&#x2F;zero, &#x2F;dev&#x2F;tty, &#x2F;dev&#x2F;loop*, &#x2F;dev&#x2F;sd*等等</td>
+</tr>
+<tr>
+<td>&#x2F;etc</td>
+<td>系统主要的配置文件几乎都放置在这个目录内，例如人员的帐号密码档、 各种服务的启始档等等。一般来说，这个目录下的各文件属性是可以让一般使用者查阅的， 但是只有root有权力修改。FHS建议不要放置可可执行文件（binary）在这个目录中喔。比较重要的文件有： &#x2F;etc&#x2F;modprobe.d&#x2F;, &#x2F;etc&#x2F;passwd, &#x2F;etc&#x2F;fstab, &#x2F;etc&#x2F;issue 等等。另外 FHS 还规范几个重要的目录最好要存在 &#x2F;etc&#x2F; 目录下喔：&#x2F;etc&#x2F;opt（必要）：这个目录在放置第三方协力软件 &#x2F;opt 的相关配置文件 &#x2F;etc&#x2F;X11&#x2F;（建议）：与 X Window 有关的各种配置文件都在这里，尤其是 xorg.conf 这个 X Server 的配置文件。 &#x2F;etc&#x2F;sgml&#x2F;（建议）：与 SGML 格式有关的各项配置文件 &#x2F;etc&#x2F;xml&#x2F;（建议）：与 XML 格式有关的各项配置文件</td>
+</tr>
+<tr>
+<td>&#x2F;lib</td>
+<td>系统的函数库非常的多，而&#x2F;lib放置的则是在开机时会用到的函数库， 以及在&#x2F;bin或&#x2F;sbin下面的指令会调用的函数库而已。 什么是函数库呢？你可以将他想成是“外挂”，某些指令必须要有这些“外挂”才能够顺利完成程序的执行之意。 另外 FSH 还要求下面的目录必须要存在：&#x2F;lib&#x2F;modules&#x2F;：这个目录主要放置可抽换式的核心相关模块（驱动程序）喔！</td>
+</tr>
+<tr>
+<td>&#x2F;media</td>
+<td>media是“媒体”的英文，顾名思义，这个&#x2F;media下面放置的就是可移除的设备啦！ 包括软盘、光盘、DVD等等设备都暂时挂载于此。常见的文件名有：&#x2F;media&#x2F;floppy, &#x2F;media&#x2F;cdrom等等。</td>
+</tr>
+<tr>
+<td>&#x2F;mnt</td>
+<td>如果你想要暂时挂载某些额外的设备，一般建议你可以放置到这个目录中。 在古早时候，这个目录的用途与&#x2F;media相同啦！只是有了&#x2F;media之后，这个目录就用来暂时挂载用了。</td>
+</tr>
+<tr>
+<td>&#x2F;opt</td>
+<td>这个是给第三方协力软件放置的目录。什么是第三方协力软件啊？ 举例来说，KDE这个桌面管理系统是一个独立的计划，不过他可以安装到Linux系统中，因此KDE的软件就建议放置到此目录下了。 另外，如果你想要自行安装额外的软件（非原本的distribution提供的），那么也能够将你的软件安装到这里来。 不过，以前的Linux系统中，我们还是习惯放置在&#x2F;usr&#x2F;local目录下呢！</td>
+</tr>
+<tr>
+<td>&#x2F;run</td>
+<td>早期的 FHS 规定系统开机后所产生的各项信息应该要放置到 &#x2F;var&#x2F;run 目录下，新版的 FHS 则规范到 &#x2F;run 下面。 由于 &#x2F;run 可以使用内存来仿真，因此性能上会好很多！</td>
+</tr>
+<tr>
+<td>&#x2F;sbin</td>
+<td>Linux有非常多指令是用来设置系统环境的，这些指令只有root才能够利用来“设置”系统，其他使用者最多只能用来“查询”而已。 放在&#x2F;sbin下面的为开机过程中所需要的，里面包括了开机、修复、还原系统所需要的指令。 至于某些服务器软件程序，一般则放置到&#x2F;usr&#x2F;sbin&#x2F;当中。至于本机自行安装的软件所产生的系统可执行文件（system binary）， 则放置到&#x2F;usr&#x2F;local&#x2F;sbin&#x2F;当中了。常见的指令包括：fdisk, fsck, ifconfig, mkfs等等。</td>
+</tr>
+<tr>
+<td>&#x2F;srv</td>
+<td>srv可以视为“service”的缩写，是一些网络服务启动之后，这些服务所需要取用的数据目录。 常见的服务例如WWW, FTP等等。举例来说，WWW服务器需要的网页数据就可以放置在&#x2F;srv&#x2F;www&#x2F;里面。 不过，系统的服务数据如果尚未要提供给网际网络任何人浏览的话，默认还是建议放置到 &#x2F;var&#x2F;lib 下面即可。</td>
+</tr>
+<tr>
+<td>&#x2F;tmp</td>
+<td>这是让一般使用者或者是正在执行的程序暂时放置文件的地方。 这个目录是任何人都能够存取的，所以你需要定期的清理一下。当然，重要数据不可放置在此目录啊！ 因为FHS甚至建议在开机时，应该要将&#x2F;tmp下的数据都删除唷！</td>
+</tr>
+<tr>
+<td>&#x2F;usr</td>
+<td>第二层 FHS 设置，后续介绍</td>
+</tr>
+<tr>
+<td>&#x2F;var</td>
+<td>第二层 FHS 设置，主要为放置变动性的数据，后续介绍</td>
+</tr>
+<tr>
+<td>第二部份：FHS 建议可以存在的目录</td>
+<td></td>
+</tr>
+<tr>
+<td>&#x2F;home</td>
+<td>这是系统默认的使用者主文件夹（home directory）。在你新增一个一般使用者帐号时， 默认的使用者主文件夹都会规范到这里来。比较重要的是，主文件夹有两种代号喔：~：代表目前这个使用者的主文件夹 ~dmtsai ：则代表 dmtsai 的主文件夹！</td>
+</tr>
+<tr>
+<td>&#x2F;lib<qual></td>
+<td>用来存放与 &#x2F;lib 不同的格式的二进制函数库，例如支持 64 位的 &#x2F;lib64 函数库等</td>
+</tr>
+<tr>
+<td>&#x2F;root</td>
+<td>系统管理员（root）的主文件夹。之所以放在这里，是因为如果进入单人维护模式而仅挂载根目录时， 该目录就能够拥有root的主文件夹，所以我们会希望root的主文件夹与根目录放置在同一个分区中。</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>应放置文件内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&#x2F;lost+found</td>
+<td>这个目录是使用标准的ext2&#x2F;ext3&#x2F;ext4文件系统格式才会产生的一个目录，目的在于当文件系统发生错误时， 将一些遗失的片段放置到这个目录下。不过如果使用的是 xfs 文件系统的话，就不会存在这个目录了！</td>
+</tr>
+<tr>
+<td>&#x2F;proc</td>
+<td>这个目录本身是一个“虚拟文件系统（virtual filesystem）”喔！他放置的数据都是在内存当中， 例如系统核心、行程信息（process）、周边设备的状态及网络状态等等。因为这个目录下的数据都是在内存当中， 所以本身不占任何硬盘空间啊！比较重要的文件例如：&#x2F;proc&#x2F;cpuinfo, &#x2F;proc&#x2F;dma, &#x2F;proc&#x2F;interrupts, &#x2F;proc&#x2F;ioports, &#x2F;proc&#x2F;net&#x2F;* 等等。</td>
+</tr>
+<tr>
+<td>&#x2F;sys</td>
+<td>这个目录其实跟&#x2F;proc非常类似，也是一个虚拟的文件系统，主要也是记录核心与系统硬件信息较相关的信息。 包括目前已载入的核心模块与核心侦测到的硬件设备信息等等。这个目录同样不占硬盘容量喔！</td>
+</tr>
+</tbody></table>
+<ul>
+<li>&#x2F;usr 的意义与内容：</li>
+</ul>
+<p>依据FHS的基本定义，&#x2F;usr里面放置的数据属于可分享的与不可变动的（shareable, static）， 如果你知道如何通过网络进行分区的挂载（例如在服务器篇会谈到的<a target="_blank" rel="noopener" href="http://linux.vbird.org/linux_server/0330nfs.php">NFS服务器</a>），那么&#x2F;usr确实可以分享给区域网络内的其他主机来使用喔！</p>
+<p>很多读者都会误会&#x2F;usr为user的缩写，其实usr是Unix Software Resource的缩写， 也就是“Unix操作系统软件资源”所放置的目录，而不是使用者的数据！。 FHS建议所有软件开发者，应该将他们的数据合理的分别放置到这个目录下的次目录，而不要自行创建该软件自己独立的目录。</p>
+<p>因为是所有系统默认的软件（distribution发布者提供的软件）都会放置到&#x2F;usr下面，因此这个目录有点类似Windows 系统的“C:\Windows\ （当中的一部份） + C:\Program files\”这两个目录的综合体，系统刚安装完毕时，这个目录会占用最多的硬盘容量。一般来说，&#x2F;usr的次目录建议有下面这些：</p>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>应放置文件内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>第一部份：FHS 要求必须要存在的目录</td>
+<td></td>
+</tr>
+<tr>
+<td>&#x2F;usr&#x2F;bin&#x2F;</td>
+<td>所有一般用户能够使用的指令都放在这里！目前新的 CentOS 7 已经将全部的使用者指令放置于此，而使用链接文件的方式将 &#x2F;bin 链接至此！ 也就是说， &#x2F;usr&#x2F;bin 与 &#x2F;bin 是一模一样了！另外，FHS 要求在此目录下不应该有子目录！</td>
+</tr>
+<tr>
+<td>&#x2F;usr&#x2F;lib&#x2F;</td>
+<td>基本上，与 &#x2F;lib 功能相同，所以 &#x2F;lib 就是链接到此目录中的！</td>
+</tr>
+<tr>
+<td>&#x2F;usr&#x2F;local&#x2F;</td>
+<td>系统管理员在本机自行安装自己下载的软件（非distribution默认提供者），建议安装到此目录， 这样会比较便于管理。举例来说，你的distribution提供的软件较旧，你想安装较新的软件但又不想移除旧版， 此时你可以将新版软件安装于&#x2F;usr&#x2F;local&#x2F;目录下，可与原先的旧版软件有分别啦！ 你可以自行到&#x2F;usr&#x2F;local去看看，该目录下也是具有bin, etc, include, lib…的次目录喔！</td>
+</tr>
+<tr>
+<td>&#x2F;usr&#x2F;sbin&#x2F;</td>
+<td>非系统正常运行所需要的系统指令。最常见的就是某些网络服务器软件的服务指令（daemon）啰！不过基本功能与 &#x2F;sbin 也差不多， 因此目前 &#x2F;sbin 就是链接到此目录中的。</td>
+</tr>
+<tr>
+<td>&#x2F;usr&#x2F;share&#x2F;</td>
+<td>主要放置只读架构的数据文件，当然也包括共享文件。在这个目录下放置的数据几乎是不分硬件架构均可读取的数据， 因为几乎都是文字文件嘛！在此目录下常见的还有这些次目录：&#x2F;usr&#x2F;share&#x2F;man：线上说明文档 &#x2F;usr&#x2F;share&#x2F;doc：软件杂项的文件说明 &#x2F;usr&#x2F;share&#x2F;zoneinfo：与时区有关的时区文件</td>
+</tr>
+<tr>
+<td>第二部份：FHS 建议可以存在的目录</td>
+<td></td>
+</tr>
+<tr>
+<td>&#x2F;usr&#x2F;games&#x2F;</td>
+<td>与游戏比较相关的数据放置处</td>
+</tr>
+<tr>
+<td>&#x2F;usr&#x2F;include&#x2F;</td>
+<td>c&#x2F;c++等程序语言的文件开始（header）与包含档（include）放置处，当我们以tarball方式 （*.tar.gz 的方式安装软件）安装某些数据时，会使用到里头的许多包含档喔！</td>
+</tr>
+<tr>
+<td>&#x2F;usr&#x2F;libexec&#x2F;</td>
+<td>某些不被一般使用者惯用的可执行文件或脚本（script）等等，都会放置在此目录中。例如大部分的 X 窗口下面的操作指令， 很多都是放在此目录下的。</td>
+</tr>
+<tr>
+<td>&#x2F;usr&#x2F;lib<qual>&#x2F;</td>
+<td>与 &#x2F;lib<qual>&#x2F;功能相同，因此目前 &#x2F;lib<qual> 就是链接到此目录中</td>
+</tr>
+<tr>
+<td>&#x2F;usr&#x2F;src&#x2F;</td>
+<td>一般源代码建议放置到这里，src有source的意思。至于核心源代码则建议放置到&#x2F;usr&#x2F;src&#x2F;linux&#x2F;目录下。</td>
+</tr>
+</tbody></table>
+<ul>
+<li>&#x2F;var 的意义与内容：</li>
+</ul>
+<p>如果&#x2F;usr是安装时会占用较大硬盘容量的目录，那么&#x2F;var就是在系统运行后才会渐渐占用硬盘容量的目录。 因为&#x2F;var目录主要针对常态性变动的文件，包括高速缓存（cache）、登录文件（log file）以及某些软件运行所产生的文件， 包括程序文件（lock file, run file），或者例如MySQL数据库的文件等等。常见的次目录有：</p>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>应放置文件内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>第一部份：FHS 要求必须要存在的目录</td>
+<td></td>
+</tr>
+<tr>
+<td>&#x2F;var&#x2F;cache&#x2F;</td>
+<td>应用程序本身运行过程中会产生的一些暂存盘；</td>
+</tr>
+<tr>
+<td>&#x2F;var&#x2F;lib&#x2F;</td>
+<td>程序本身执行的过程中，需要使用到的数据文件放置的目录。在此目录下各自的软件应该要有各自的目录。 举例来说，MySQL的数据库放置到&#x2F;var&#x2F;lib&#x2F;mysql&#x2F;而rpm的数据库则放到&#x2F;var&#x2F;lib&#x2F;rpm去！</td>
+</tr>
+<tr>
+<td>&#x2F;var&#x2F;lock&#x2F;</td>
+<td>某些设备或者是文件资源一次只能被一个应用程序所使用，如果同时有两个程序使用该设备时， 就可能产生一些错误的状况，因此就得要将该设备上锁（lock），以确保该设备只会给单一软件所使用。 举例来说，烧录机正在烧录一块光盘，你想一下，会不会有两个人同时在使用一个烧录机烧片？ 如果两个人同时烧录，那片子写入的是谁的数据？所以当第一个人在烧录时该烧录机就会被上锁， 第二个人就得要该设备被解除锁定（就是前一个人用完了）才能够继续使用啰。目前此目录也已经挪到 &#x2F;run&#x2F;lock 中！</td>
+</tr>
+<tr>
+<td>&#x2F;var&#x2F;log&#x2F;</td>
+<td>重要到不行！这是登录文件放置的目录！里面比较重要的文件如&#x2F;var&#x2F;log&#x2F;messages, &#x2F;var&#x2F;log&#x2F;wtmp（记录登陆者的信息）等。</td>
+</tr>
+<tr>
+<td>&#x2F;var&#x2F;mail&#x2F;</td>
+<td>放置个人电子邮件信箱的目录，不过这个目录也被放置到&#x2F;var&#x2F;spool&#x2F;mail&#x2F;目录中！ 通常这两个目录是互为链接文件啦！</td>
+</tr>
+<tr>
+<td>&#x2F;var&#x2F;run&#x2F;</td>
+<td>某些程序或者是服务启动后，会将他们的PID放置在这个目录下喔！至于PID的意义我们会在后续章节提到的。 与 &#x2F;run 相同，这个目录链接到 &#x2F;run 去了！</td>
+</tr>
+<tr>
+<td>&#x2F;var&#x2F;spool&#x2F;</td>
+<td>这个目录通常放置一些伫列数据，所谓的“伫列”就是排队等待其他程序使用的数据啦！ 这些数据被使用后通常都会被删除。举例来说，系统收到新信会放置到&#x2F;var&#x2F;spool&#x2F;mail&#x2F;中， 但使用者收下该信件后该封信原则上就会被删除。信件如果暂时寄不出去会被放到&#x2F;var&#x2F;spool&#x2F;mqueue&#x2F;中， 等到被送出后就被删除。如果是工作调度数据（crontab），就会被放置到&#x2F;var&#x2F;spool&#x2F;cron&#x2F;目录中！</td>
+</tr>
+</tbody></table>
+<h1 id="文件与目录管理"><a href="#文件与目录管理" class="headerlink" title="文件与目录管理"></a>文件与目录管理</h1><h3 id="相对路径与绝对路径"><a href="#相对路径与绝对路径" class="headerlink" title="相对路径与绝对路径"></a>相对路径与绝对路径</h3><ul>
+<li>绝对路径：路径的写法“一定由根目录 &#x2F; 写起”，例如： &#x2F;usr&#x2F;share&#x2F;doc 这个目录。</li>
+<li>相对路径：路径的写法“不是由 &#x2F; 写起”，例如由 &#x2F;usr&#x2F;share&#x2F;doc 要到 &#x2F;usr&#x2F;share&#x2F;man 下面时，可以写成： “cd ..&#x2F;man”这就是相对路径的写法啦！相对路径意指“相对于目前工作目录的路径！”</li>
+</ul>
+<p><strong>相对路径的用途</strong></p>
+<p>假设你写了一个软件， 这个软件共需要三个目录，分别是 etc, bin, man 这三个目录，然而由于不同的人喜欢安装在不同的目录之下， 假设甲安装的目录是 &#x2F;usr&#x2F;local&#x2F;packages&#x2F;etc, &#x2F;usr&#x2F;local&#x2F;packages&#x2F;bin 及 &#x2F;usr&#x2F;local&#x2F;packages&#x2F;man ，不过乙却喜欢安装在 &#x2F;home&#x2F;packages&#x2F;etc, &#x2F;home&#x2F;packages&#x2F;bin, &#x2F;home&#x2F;packages&#x2F;man 这三个目录中，请问如果需要用到绝对路径的话，那么是否很麻烦呢？是的！ 如此一来每个目录下的东西就很难对应的起来！这个时候相对路径的写法就显的特别的重要了！</p>
+<p><strong>绝对路径用途</strong></p>
+<p>“绝对路径的正确度要比较好～”。 一般来说，如果是在写脚本 （shell scripts） 来管理系统的条件下，务必使用绝对路径的写法。 怎么说呢？因为绝对路径的写法虽然比较麻烦，但是可以肯定这个写法绝对不会有问题。 如果使用相对路径在程序当中，则可能由于你执行的工作环境不同，导致一些问题的发生。</p>
+<h3 id="目录的相关操作"><a href="#目录的相关操作" class="headerlink" title="目录的相关操作"></a>目录的相关操作</h3><p>我们之前稍微提到变换目录的指令是cd，还有哪些可以进行目录操作的指令呢？ 例如创建目录啊、删除目录之类的～还有，得要先知道的，就是有哪些比较特殊的目录呢？ 举例来说，下面这些就是比较特殊的目录，得要用力的记下来才行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.         代表此层目录</span><br><span class="line">..        代表上一层目录</span><br><span class="line">-         代表前一个工作目录</span><br><span class="line">~         代表“目前使用者身份”所在的主文件夹</span><br><span class="line">~account  代表 account 这个使用者的主文件夹（account是个帐号名称）</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>cd：变换目录</li>
+<li>pwd：显示目前的目录</li>
+<li>mkdir：创建一个新的目录</li>
+<li>rmdir：删除一个空的目录</li>
+</ul>
+<p><strong>cd （change directory, 变换目录）</strong></p>
+<p>我们知道dmtsai这个使用者的主文件夹是&#x2F;home&#x2F;dmtsai&#x2F;，而root主文件夹则是&#x2F;root&#x2F;，假设我以root身份在 Linux系统中，那么简单的说明一下这几个特殊的目录的意义是：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[dmtsai@study ~]$ su -  # 先切换身份成为 root 看看！</span><br><span class="line">[root@study ~]# cd [相对路径或绝对路径]</span><br><span class="line"><span class="meta"># </span><span class="language-bash">最重要的就是目录的绝对路径与相对路径，还有一些特殊目录的符号啰！</span></span><br><span class="line">[root@study ~]# cd ~dmtsai</span><br><span class="line"><span class="meta"># </span><span class="language-bash">代表去到 dmtsai 这个使用者的主文件夹，亦即 /home/dmtsai</span></span><br><span class="line">[root@study dmtsai]# cd ~</span><br><span class="line"><span class="meta"># </span><span class="language-bash">表示回到自己的主文件夹，亦即是 /root 这个目录</span></span><br><span class="line">[root@study ~]# cd</span><br><span class="line"><span class="meta"># </span><span class="language-bash">没有加上任何路径，也还是代表回到自己主文件夹的意思喔！</span></span><br><span class="line">[root@study ~]# cd ..</span><br><span class="line"><span class="meta"># </span><span class="language-bash">表示去到目前的上层目录，亦即是 /root 的上层目录的意思；</span></span><br><span class="line">[root@study /]# cd -</span><br><span class="line"><span class="meta"># </span><span class="language-bash">表示回到刚刚的那个目录，也就是 /root 啰～</span></span><br><span class="line">[root@study ~]# cd /var/spool/mail</span><br><span class="line"><span class="meta"># </span><span class="language-bash">这个就是绝对路径的写法！直接指定要去的完整路径名称！</span></span><br><span class="line">[root@study mail]# cd ../postfix</span><br><span class="line"><span class="meta"># </span><span class="language-bash">这个是相对路径的写法，我们由/var/spool/mail 去到/var/spool/postfix 就这样写！</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>pwd （显示目前所在的目录）</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@study ~]# pwd [-P]</span><br><span class="line">选项与参数：</span><br><span class="line">-P  ：显示出确实的路径，而非使用链接 （link） 路径。</span><br><span class="line"></span><br><span class="line">范例：单纯显示出目前的工作目录：</span><br><span class="line">[root@study ~]# pwd</span><br><span class="line">/root   &amp;lt;== 显示出目录啦～</span><br><span class="line"></span><br><span class="line">范例：显示出实际的工作目录，而非链接文件本身的目录名而已</span><br><span class="line">[root@study ~]# cd /var/mail   &amp;lt;==注意，/var/mail是一个链接文件</span><br><span class="line">[root@study mail]# pwd</span><br><span class="line">/var/mail         &amp;lt;==列出目前的工作目录</span><br><span class="line">[root@study mail]# pwd -P</span><br><span class="line">/var/spool/mail   &amp;lt;==怎么回事？有没有加 -P 差很多～</span><br><span class="line">[root@study mail]# ls -ld /var/mail</span><br><span class="line">lrwxrwxrwx. 1 root root 10 May  4 17:51 /var/mail -&amp;gt; spool/mail</span><br><span class="line"><span class="meta"># </span><span class="language-bash">看到这里应该知道为啥了吧？因为 /var/mail 是链接文件，链接到 /var/spool/mail</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">所以，加上 <span class="built_in">pwd</span> -P 的选项后，会不以链接文件的数据显示，而是显示正确的完整路径啊！</span></span><br></pre></td></tr></table></figure>
+
+<p>pwd是Print Working Directory的缩写，也就是显示目前所在目录的指令， 例如在上个表格最后的目录是&#x2F;var&#x2F;mail这个目录，但是提示字符仅显示mail， 如果你想要知道目前所在的目录，可以输入pwd即可。此外，由于很多的套件所使用的目录名称都相同，例如 &#x2F;usr&#x2F;local&#x2F;etc还有&#x2F;etc，但是通常Linux仅列出最后面那一个目录而已，这个时候你就可以使用pwd 来知道你的所在目录</p>
+<p><strong>mkdir （创建新目录）</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[root@study ~]# mkdir [-mp] 目录名称</span><br><span class="line">选项与参数：</span><br><span class="line">-m ：设置文件的权限喔！直接设置，不需要看默认权限 （umask） 的脸色～</span><br><span class="line">-p ：帮助你直接将所需要的目录（包含上层目录）递回创建起来！</span><br><span class="line"></span><br><span class="line">范例：请到/tmp下面尝试创建数个新目录看看：</span><br><span class="line">[root@study ~]# cd /tmp</span><br><span class="line">[root@study tmp]# mkdir test    &amp;lt;==创建一名为 test 的新目录</span><br><span class="line">[root@study tmp]# mkdir test1/test2/test3/test4</span><br><span class="line">mkdir: cannot create directory ‘test1/test2/test3/test4’: No such file or directory</span><br><span class="line"><span class="meta"># </span><span class="language-bash">话说，系统告诉我们，没可能创建这个目录啊！就是没有目录才要创建的！见鬼嘛？</span></span><br><span class="line">[root@study tmp]# mkdir -p test1/test2/test3/test4</span><br><span class="line"><span class="meta"># </span><span class="language-bash">原来是要建 test4 上层没先建 test3 之故！加了这个 -p 的选项，可以自行帮你创建多层目录！</span></span><br><span class="line"></span><br><span class="line">范例：创建权限为rwx--x--x的目录</span><br><span class="line">[root@study tmp]# mkdir -m 711 test2</span><br><span class="line">[root@study tmp]# ls -ld test*</span><br><span class="line">drwxr-xr-x. 2 root   root  6 Jun  4 19:03 test</span><br><span class="line">drwxr-xr-x. 3 root   root 18 Jun  4 19:04 test1</span><br><span class="line">drwx--x--x. 2 root   root  6 Jun  4 19:05 test2</span><br><span class="line"><span class="meta"># </span><span class="language-bash">仔细看上面的权限部分，如果没有加上 -m 来强制设置属性，系统会使用默认属性。</span></span><br></pre></td></tr></table></figure>
+
+<p>如果想要创建新的目录的话，那么就使用mkdir （make directory）吧！ 不过，在默认的情况下， 你所需要的目录得一层一层的创建才行！例如：假如你要创建一个目录为 &#x2F;home&#x2F;bird&#x2F;testing&#x2F;test1，那么首先必须要有 &#x2F;home 然后 &#x2F;home&#x2F;bird ，再来 &#x2F;home&#x2F;bird&#x2F;testing 都必须要存在，才可以创建 &#x2F;home&#x2F;bird&#x2F;testing&#x2F;test1 这个目录！假如没有 &#x2F;home&#x2F;bird&#x2F;testing 时，就没有办法创建 test1 的目录啰！</p>
+<p>不过，现在有个更简单有效的方法啦！那就是加上 -p 这个选项喔！你可以直接下达：“ mkdir -p &#x2F;home&#x2F;bird&#x2F;testing&#x2F;test1 ” 则系统会自动的帮你将 &#x2F;home, &#x2F;home&#x2F;bird, &#x2F;home&#x2F;bird&#x2F;testing 依序的创建起目录！并且， 如果该目录本来就已经存在时，系统也不会显示错误讯息喔！。 不过鸟哥不建议常用-p这个选项，因为担心如果你打错字，那么目录名称就会变的乱七八糟的！</p>
+<ul>
+<li>rmdir （删除“空”的目录）</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[root@study ~]# rmdir [-p] 目录名称</span><br><span class="line">选项与参数：</span><br><span class="line">-p ：连同“上层”“空的”目录也一起删除</span><br><span class="line"></span><br><span class="line">范例：将于mkdir范例中创建的目录（/tmp下面）删除掉！</span><br><span class="line">[root@study tmp]# ls -ld test*   &amp;lt;==看看有多少目录存在？</span><br><span class="line">drwxr-xr-x. 2 root   root  6 Jun  4 19:03 test</span><br><span class="line">drwxr-xr-x. 3 root   root 18 Jun  4 19:04 test1</span><br><span class="line">drwx--x--x. 2 root   root  6 Jun  4 19:05 test2</span><br><span class="line">[root@study tmp]# rmdir test   &amp;lt;==可直接删除掉，没问题</span><br><span class="line">[root@study tmp]# rmdir test1  &amp;lt;==因为尚有内容，所以无法删除！</span><br><span class="line">rmdir: failed to remove ‘test1’: Directory not empty</span><br><span class="line">[root@study tmp]# rmdir -p test1/test2/test3/test4</span><br><span class="line">[root@study tmp]# ls -ld test*    &amp;lt;==您看看，下面的输出中test与test1不见了！</span><br><span class="line">drwx--x--x. 2 root   root  6 Jun  4 19:05 test2</span><br><span class="line"><span class="meta"># </span><span class="language-bash">瞧！利用 -p 这个选项，立刻就可以将 test1/test2/test3/test4 一次删除～</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">不过要注意的是，这个 <span class="built_in">rmdir</span> 仅能“删除空的目录”喔！</span></span><br></pre></td></tr></table></figure>
+
+<p>如果想要删除旧有的目录时，就使用rmdir吧！例如将刚刚创建的test杀掉，使用“ rmdir test ”即可！请注意呦！目录需要一层一层的删除才行！而且被删除的目录里面必定不能存在其他的目录或文件！ 这也是所谓的空的目录（empty directory）的意思啊！那如果要将所有目录下的东西都杀掉呢？！ 这个时候就必须使用“ rm -r test ！不过，还是使用 rmdir 比较不危险！你也可以尝试以 -p 的选项加入，来删除上层的目录。</p>
+<h3 id="关于可执行文件路径的变量：-PATH"><a href="#关于可执行文件路径的变量：-PATH" class="headerlink" title="关于可执行文件路径的变量： $PATH"></a>关于可执行文件路径的变量： $PATH</h3><p>文件属性的指令ls完整文件名为：&#x2F;bin&#x2F;ls（这是绝对路径）， 那你会不会觉得很奇怪：“为什么我可以在任何地方执行&#x2F;bin&#x2F;ls这个指令呢？ ” 为什么我在任何目录下输入 ls 就一定可以显示出一些讯息而不会说找不到该 &#x2F;bin&#x2F;ls 指令呢？ 这是因为环境变量 PATH 的帮助所致呀！</p>
+<p>当我们在执行一个指令的时候，举例来说“ls”好了，系统会依照PATH的设置去每个PATH定义的目录下搜寻文件名为ls的可可执行文件， 如果在PATH定义的目录中含有多个文件名为ls的可可执行文件，那么先搜寻到的同名指令先被执行！</p>
+<p>“echo $PATH”来看看到底有哪些目录被定义， echo有“显示、印出”的意思，而 PATH 前面加的 $ 表示后面接的是变量，所以会显示出目前的 PATH ！</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">djiwork@ubuntu:~$ echo $PATH</span><br><span class="line">/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>例题：假设你是root，如果你将ls由&#x2F;bin&#x2F;ls移动成为&#x2F;root&#x2F;ls（可用“mv &#x2F;bin&#x2F;ls &#x2F;root”指令达成），然后你自己本身也在&#x2F;root目录下， 请问（1）你能不能直接输入ls来执行？（2）若不能，你该如何执行ls这个指令？（3）若要直接输入ls即可执行，又该如何进行？答：由于这个例题的重点是将某个可执行文件移动到非正规目录去，所以我们先要进行下面的动作才行：（务必先使用 su - 切换成为root的身份）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@study ~]# mv /bin/ls /root</span><br><span class="line"><span class="meta"># </span><span class="language-bash"><span class="built_in">mv</span> 为移动，可将文件在不同的目录间进行移动作业</span></span><br></pre></td></tr></table></figure>
+
+<p>（1）接下来不论你在那个目录下面输入任何与ls相关的指令，都没有办法顺利的执行ls了！ 也就是说，你不能直接输入ls来执行，因为&#x2F;root这个目录并不在PATH指定的目录中， 所以，即使你在&#x2F;root目录下，也不能够搜寻到ls这个指令！</p>
+<p>（2）因为这个ls确实存在于&#x2F;root下面，并不是被删除了！所以我们可以通过使用绝对路径或者是相对路径直接指定这个可执行文件文件名， 下面的两个方法都能够执行ls这个指令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@study ~]# /root/ls  &amp;lt;==直接用绝对路径指定该文件名</span><br><span class="line">[root@study ~]# ./ls      &amp;lt;==因为在 /root 目录下，就用./ls来指定</span><br></pre></td></tr></table></figure>
+
+<p>（3）如果想要让root在任何目录均可执行&#x2F;root下面的ls，那么就将&#x2F;root加入PATH当中即可。 加入的方法很简单，就像下面这样：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@study ~]# PATH=&quot;$&#123;PATH&#125;:/root&quot;</span><br></pre></td></tr></table></figure>
+
+<p>PATH（一定是大写）这个变量的内容是由一堆目录所组成的，每个目录中间用冒号（:）来隔开， 每个目录是有“顺序”之分的。</p>
+<p> 如果确定这个例题进行没有问题了，请将ls搬回&#x2F;bin下面，不然系统会挂点的！</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@study ~]# mv /root/ls /bin</span><br></pre></td></tr></table></figure>
+
+<p>某些情况下，即使你已经将 ls 搬回 &#x2F;bin 了，不过系统还是会告知你无法处理 &#x2F;root&#x2F;ls ！很可能是因为指令参数被高速缓存的关系。 不要紧张，只要登出 （exit） 再登陆 （su -） 就可以继续快乐的使用 ls 了！</p>
+<h3 id="文件与目录的检视：-ls"><a href="#文件与目录的检视：-ls" class="headerlink" title="文件与目录的检视： ls"></a>文件与目录的检视： ls</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">[root@study ~]# ls [-aAdfFhilnrRSt] 文件名或目录名称..</span><br><span class="line">[root@study ~]# ls [--color=&#123;never,auto,always&#125;] 文件名或目录名称..</span><br><span class="line">[root@study ~]# ls [--full-time] 文件名或目录名称..</span><br><span class="line">选项与参数：</span><br><span class="line">-a  ：全部的文件，连同隐藏文件（ 开头为 . 的文件） 一起列出来（常用）</span><br><span class="line">-A  ：全部的文件，连同隐藏文件，但不包括 . 与 .. 这两个目录</span><br><span class="line">-d  ：仅列出目录本身，而不是列出目录内的文件数据（常用）</span><br><span class="line">-f  ：直接列出结果，而不进行排序 （ls 默认会以文件名排序！）</span><br><span class="line">-F  ：根据文件、目录等信息，给予附加数据结构，例如：</span><br><span class="line">      *:代表可可执行文件； /:代表目录； =:代表 socket 文件； &amp;#124;:代表 FIFO 文件；</span><br><span class="line">-h  ：将文件大小以人类较易读的方式（例如 GB, KB 等等）列出来；</span><br><span class="line">-i  ：列出 inode 号码，inode 的意义下一章将会介绍；</span><br><span class="line">-l  ：长数据串行出，包含文件的属性与权限等等数据；（常用）</span><br><span class="line">-n  ：列出 UID 与 GID 而非使用者与群组的名称 （UID与GID会在帐号管理提到！）</span><br><span class="line">-r  ：将排序结果反向输出，例如：原本文件名由小到大，反向则为由大到小；</span><br><span class="line">-R  ：连同子目录内容一起列出来，等于该目录下的所有文件都会显示出来；</span><br><span class="line">-S  ：以文件大小大小排序，而不是用文件名排序；</span><br><span class="line">-t  ：依时间排序，而不是用文件名。</span><br><span class="line">--color=never  ：不要依据文件特性给予颜色显示；</span><br><span class="line">--color=always ：显示颜色</span><br><span class="line">--color=auto   ：让系统自行依据设置来判断是否给予颜色</span><br><span class="line">--full-time    ：以完整时间模式 （包含年、月、日、时、分） 输出</span><br><span class="line">--time=&#123;atime,ctime&#125; ：输出 access 时间或改变权限属性时间 （ctime）</span><br><span class="line">                       而非内容变更时间 （modification time）</span><br></pre></td></tr></table></figure>
+
+<p>在Linux系统当中，这个 ls 指令可能是最常被执行的吧！因为我们随时都要知道文件或者是目录的相关信息, 不过，我们Linux的文件所记录的信息实在是太多了，ls 没有需要全部都列出来呢～ 所以，当你只有下达 ls 时，默认显示的只有：非隐藏文件的文件名、 以文件名进行排序及文件名代表的颜色显示如此而已。举例来说， 你下达“ ls &#x2F;etc ”之后，只有经过排序的文件名以及以蓝色显示目录及白色显示一般文件，如此而已。</p>
+<p>其实 ls 的用法还有很多，包括查阅文件所在 i-node 号码的 ls -i 选项，以及用来进行文件排序的 -S 选项，还有用来查阅不同时间的动作的 –time&#x3D;atime 等选项（更多时间说明请参考本章后面<a target="_blank" rel="noopener" href="https://wizardforcel.gitbooks.io/vbird-linux-basic-4e/Text/index.html#touch">touch</a>的说明）。而这些选项的存在都是因为 Linux 文件系统记录了很多有用的信息的缘故。那么 Linux 的文件系统中，这些与权限、属性有关的数据放在哪里呢？ 放在 i-node 里面。</p>
+<h3 id="复制、删除与移动：-cp-rm-mv"><a href="#复制、删除与移动：-cp-rm-mv" class="headerlink" title="复制、删除与移动： cp, rm, mv"></a>复制、删除与移动： cp, rm, mv</h3><p>要复制文件，请使用 cp （copy） 这个指令即可～不过， cp 这个指令的用途可多了～ 除了单纯的复制之外，还可以创建链接文件 （就是捷径啰），比对两文件的新旧而予以更新， 以及复制整个目录等等的功能呢！至于移动目录与文件，则使用 mv （move）， 这个指令也可以直接拿来作更名 （rename） 的动作喔！至于移除吗？那就是 rm （remove） </p>
+<ul>
+<li>cp （复制文件或目录）</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@study ~]# cp [-adfilprsu] 来源文件（source） 目标文件（destination）</span><br><span class="line">[root@study ~]# cp [options] source1 source2 source3 .... directory</span><br><span class="line">选项与参数：</span><br><span class="line">-a  ：相当于 -dr --preserve=all 的意思，至于 dr 请参考下列说明；（常用）</span><br><span class="line">-d  ：若来源文件为链接文件的属性（link file），则复制链接文件属性而非文件本身；</span><br><span class="line">-f  ：为强制（force）的意思，若目标文件已经存在且无法打开，则移除后再尝试一次；</span><br><span class="line">-i  ：若目标文件（destination）已经存在时，在覆盖时会先询问动作的进行（常用）</span><br><span class="line">-l  ：进行硬式链接（hard link）的链接文件创建，而非复制文件本身；</span><br><span class="line">-p  ：连同文件的属性（权限、用户、时间）一起复制过去，而非使用默认属性（备份常用）；</span><br><span class="line">-r  ：递回持续复制，用于目录的复制行为；（常用）</span><br><span class="line">-s  ：复制成为符号链接文件 （symbolic link），亦即“捷径”文件；</span><br><span class="line">-u  ：destination 比 source 旧才更新 destination，或 destination 不存在的情况下才复制。</span><br><span class="line">--preserve=all ：除了 -p 的权限相关参数外，还加入 SELinux 的属性, links, xattr 等也复制了。</span><br><span class="line">最后需要注意的，如果来源文件有两个以上，则最后一个目的文件一定要是“目录”才行！</span><br></pre></td></tr></table></figure>
+
+<p>复制（cp）这个指令是非常重要的，不同身份者执行这个指令会有不同的结果产生，尤其是那个-a, -p的选项， 对于不同身份来说，差异则非常的大！</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">范例一：用root身份，将主文件夹下的 .bashrc 复制到 /tmp 下，并更名为 bashrc</span><br><span class="line">[root@study ~]# cp ~/.bashrc /tmp/bashrc</span><br><span class="line">[root@study ~]# cp -i ~/.bashrc /tmp/bashrc</span><br><span class="line">cp: overwrite `/tmp/bashrc&#x27;? n  &amp;lt;==n不覆盖，y为覆盖</span><br><span class="line"><span class="meta"># </span><span class="language-bash">重复作两次动作，由于 /tmp 下面已经存在 bashrc 了，加上 -i 选项后，</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">则在覆盖前会询问使用者是否确定！可以按下 n 或者 y 来二次确认呢！</span></span><br><span class="line"></span><br><span class="line">范例二：变换目录到/tmp，并将/var/log/wtmp复制到/tmp且观察属性：</span><br><span class="line">[root@study ~]# cd /tmp</span><br><span class="line">[root@study tmp]# cp /var/log/wtmp . &amp;lt;==想要复制到目前的目录，最后的 . 不要忘</span><br><span class="line">[root@study tmp]# ls -l /var/log/wtmp wtmp</span><br><span class="line">-rw-rw-r--. 1 root utmp 28416 Jun 11 18:56 /var/log/wtmp</span><br><span class="line">-rw-r--r--. 1 root root 28416 Jun 11 19:01 wtmp</span><br><span class="line"><span class="meta"># </span><span class="language-bash">注意上面的特殊字体，在不加任何选项的情况下，文件的某些属性/权限会改变；</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">这是个很重要的特性！要注意喔！还有，连文件创建的时间也不一样了！</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">那如果你想要将文件的所有特性都一起复制过来该怎办？可以加上 -a 喔！如下所示：</span></span><br><span class="line"></span><br><span class="line">[root@study tmp]# cp -a /var/log/wtmp wtmp_2</span><br><span class="line">[root@study tmp]# ls -l /var/log/wtmp wtmp_2</span><br><span class="line">-rw-rw-r--. 1 root utmp 28416 Jun 11 18:56 /var/log/wtmp</span><br><span class="line">-rw-rw-r--. 1 root utmp 28416 Jun 11 18:56 wtmp_2</span><br><span class="line"><span class="meta"># </span><span class="language-bash">瞭了吧！整个数据特性完全一模一样ㄟ！真是不赖～这就是 -a 的特性！</span></span><br></pre></td></tr></table></figure>
+
+<p>这个 cp 的功能很多，由于我们常常会进行一些数据的复制，所以也会常常用到这个指令的。 一般来说，我们如果去复制别人的数据 （当然，该文件你必须要有 read 的权限才行啊！ ^<em>^） 时， 总是希望复制到的数据最后是我们自己的，所以，在默认的条件中， cp 的来源文件与目的文件的权限是不同的，目的文件的拥有者通常会是指令操作者本身。</em></p>
+<p><strong>由于具有这个特性，因此当我们在进行备份的时候，某些需要特别注意的特殊权限文件， 例如密码档 （&#x2F;etc&#x2F;shadow） 以及一些配置文件，就不能直接以 cp 来复制，而必须要加上 -a 或者是 -p 等等可以完整复制文件权限的选项才行！另外，如果你想要复制文件给其他的使用者， 也必须要注意到文件的权限（包含读、写、执行以及文件拥有者等等）， 否则，其他人还是无法针对你给予的文件进行修订的动作喔！注意注意！</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">范例三：复制 /etc/ 这个目录下的所有内容到 /tmp 下面</span><br><span class="line">[root@study tmp]# cp /etc/ /tmp</span><br><span class="line">cp: omitting directory `/etc&#x27;   &amp;lt;== 如果是目录则不能直接复制，要加上 -r 的选项</span><br><span class="line">[root@study tmp]# cp -r /etc/ /tmp</span><br><span class="line"><span class="meta"># </span><span class="language-bash">还是要再次的强调喔！ -r 是可以复制目录，但是，文件与目录的权限可能会被改变</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">所以，也可以利用“ <span class="built_in">cp</span> -a /etc /tmp ”来下达指令喔！尤其是在备份的情况下！</span></span><br><span class="line"></span><br><span class="line">范例四：将范例一复制的 bashrc 创建一个链接文件 （symbolic link）</span><br><span class="line">[root@study tmp]# ls -l bashrc</span><br><span class="line">-rw-r--r--. 1 root root 176 Jun 11 19:01 bashrc  &amp;lt;==先观察一下文件情况</span><br><span class="line">[root@study tmp]# cp -s bashrc bashrc_slink</span><br><span class="line">[root@study tmp]# cp -l bashrc bashrc_hlink</span><br><span class="line">[root@study tmp]# ls -l bashrc*</span><br><span class="line">-rw-r--r--. 2 root root 176 Jun 11 19:01 bashrc         &amp;lt;==与原始文件不太一样了！</span><br><span class="line">-rw-r--r--. 2 root root 176 Jun 11 19:01 bashrc_hlink</span><br><span class="line">lrwxrwxrwx. 1 root root   6 Jun 11 19:06 bashrc_slink -&amp;gt; bashrc</span><br></pre></td></tr></table></figure>
+
+<p>范例四可有趣了！使用 -l 及 -s 都会创建所谓的链接文件（link file），但是这两种链接文件却有不一样的情况。这是怎么一回事啊？ 那个 -l 就是所谓的硬链接（hard link,I-node中的连接数会增加），至于 -s 则是软链接（symbolic link，i-node中连接数不会增加）， 简单来说，bashrc_slink 是一个“捷径”，这个捷径会链接到bashrc去！所以你会看到文件名右侧会有个指向（-&gt;）的符号！</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">范例五：若 ~/.bashrc 比 /tmp/bashrc 新才复制过来</span><br><span class="line">[root@study tmp]# cp -u ~/.bashrc /tmp/bashrc</span><br><span class="line"><span class="meta"># </span><span class="language-bash">这个 -u 的特性，是在目标文件与来源文件有差异时，才会复制的。</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">所以，比较常被用于“备份”的工作当中喔！ ^_^</span></span><br><span class="line"></span><br><span class="line">范例六：将范例四造成的 bashrc_slink 复制成为 bashrc_slink_1 与bashrc_slink_2</span><br><span class="line">[root@study tmp]# cp bashrc_slink bashrc_slink_1</span><br><span class="line">[root@study tmp]# cp -d bashrc_slink bashrc_slink_2</span><br><span class="line">[root@study tmp]# ls -l bashrc bashrc_slink*</span><br><span class="line">-rw-r--r--. 2 root root 176 Jun 11 19:01 bashrc</span><br><span class="line">lrwxrwxrwx. 1 root root   6 Jun 11 19:06 bashrc_slink -&amp;gt; bashrc</span><br><span class="line">-rw-r--r--. 1 root root 176 Jun 11 19:09 bashrc_slink_1            &amp;lt;==与原始文件相同</span><br><span class="line">lrwxrwxrwx. 1 root root   6 Jun 11 19:10 bashrc_slink_2 -&amp;gt; bashrc  &amp;lt;==是链接文件！</span><br><span class="line"><span class="meta"># </span><span class="language-bash">这个例子也是很有趣喔！原本复制的是链接文件，但是却将链接文件的实际文件复制过来了</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">也就是说，如果没有加上任何选项时，<span class="built_in">cp</span>复制的是原始文件，而非链接文件的属性！</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">若要复制链接文件的属性，就得要使用 -d 的选项了！如 bashrc_slink_2 所示。</span></span><br><span class="line"></span><br><span class="line">范例七：将主文件夹的 .bashrc 及 .bash_history 复制到 /tmp 下面</span><br><span class="line">[root@study tmp]# cp ~/.bashrc ~/.bash_history /tmp</span><br><span class="line"><span class="meta"># </span><span class="language-bash">可以将多个数据一次复制到同一个目录去！最后面一定是目录！</span></span><br></pre></td></tr></table></figure>
+
+<p>由于 dmtsai 的身份并不能随意修改文件的拥有者与群组，因此虽然能够复制wtmp的相关权限与时间等属性， 但是与拥有者、群组相关的，原本 dmtsai 身份无法进行的动作，即使加上 -a 选项，也是无法达成完整复制权限的！</p>
+<p><strong>总之，由于 cp 有种种的文件属性与权限的特性，所以，在复制时，你必须要清楚的了解到：</strong></p>
+<ul>
+<li><p>是否需要完整的保留来源文件的信息？</p>
+</li>
+<li><p>来源文件是否为链接文件 （symbolic link file）？</p>
+</li>
+<li><p>来源文件是否为特殊的文件，例如 FIFO, socket 等？</p>
+</li>
+<li><p>来源文件是否为目录？</p>
+</li>
+<li><p>rm （移除文件或目录）</p>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">[root@study ~]# rm [-fir] 文件或目录</span><br><span class="line">选项与参数：</span><br><span class="line">-f  ：就是 force 的意思，忽略不存在的文件，不会出现警告讯息；</span><br><span class="line">-i  ：互动模式，在删除前会询问使用者是否动作</span><br><span class="line">-r  ：递回删除啊！最常用在目录的删除了！这是非常危险的选项！！！</span><br><span class="line"></span><br><span class="line">范例一：将刚刚在 cp 的范例中创建的 bashrc 删除掉！</span><br><span class="line">[root@study ~]# cd /tmp</span><br><span class="line">[root@study tmp]# rm -i bashrc</span><br><span class="line">rm: remove regular file `bashrc&#x27;? y</span><br><span class="line"><span class="meta"># </span><span class="language-bash">如果加上 -i 的选项就会主动询问喔，避免你删除到错误的文件名！</span></span><br><span class="line"></span><br><span class="line">范例二：通过万用字符*的帮忙，将/tmp下面开头为bashrc的文件名通通删除：</span><br><span class="line">[root@study tmp]# rm -i bashrc*</span><br><span class="line"><span class="meta"># </span><span class="language-bash">注意那个星号，代表的是 0 到无穷多个任意字符喔！很好用的东西！</span></span><br><span class="line"></span><br><span class="line">范例三：将 cp 范例中所创建的 /tmp/etc/ 这个目录删除掉！</span><br><span class="line">[root@study tmp]# rmdir /tmp/etc</span><br><span class="line">rmdir: failed to remove &#x27;/tmp/etc&#x27;: Directory not empty   &amp;lt;== 删不掉啊！因为这不是空的目录！</span><br><span class="line">[root@study tmp]# rm -r /tmp/etc</span><br><span class="line">rm: descend into directory `/tmp/etc&#x27;? y</span><br><span class="line">rm: remove regular file `/tmp/etc/fstab&#x27;? y</span><br><span class="line">rm: remove regular empty file `/tmp/etc/crypttab&#x27;? ^C  &amp;lt;== 按下 [crtl]+c 中断</span><br><span class="line">.....（中间省略）.....</span><br><span class="line"><span class="meta"># </span><span class="language-bash">因为身份是 root ，默认已经加入了 -i 的选项，所以你要一直按 y 才会删除！</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">如果不想要继续按 y ，可以按下“ [ctrl]-c ”来结束 <span class="built_in">rm</span> 的工作。</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">这是一种保护的动作，如果确定要删除掉此目录而不要询问，可以这样做：</span></span><br><span class="line">[root@study tmp]# \rm -r /tmp/etc</span><br><span class="line"><span class="meta"># </span><span class="language-bash">在指令前加上反斜线，可以忽略掉 <span class="built_in">alias</span> 的指定选项喔！至于 <span class="built_in">alias</span> 我们在bash再谈！</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">拜托！这个范例很可怕！你不要删错了！删除 /etc 系统是会挂掉的！</span></span><br><span class="line"></span><br><span class="line">范例四：删除一个带有 - 开头的文件</span><br><span class="line">[root@study tmp]# touch ./-aaa-  &amp;lt;==[touch](../Text/index.html#touch)这个指令可以创建空文件！</span><br><span class="line">[root@study tmp]# ls -l</span><br><span class="line">-rw-r--r--. 1 root   root       0 Jun 11 19:22 -aaa-  &amp;lt;==文件大小为0，所以是空文件</span><br><span class="line">[root@study tmp]# rm -aaa-</span><br><span class="line">rm: invalid option -- &#x27;a&#x27;                    &amp;lt;== 因为 &quot;-&quot; 是选项嘛！所以系统误判了！</span><br><span class="line">Try &#x27;rm ./-aaa-&#x27; to remove the file `-aaa-&#x27;. &amp;lt;== 新的 bash 有给建议的</span><br><span class="line">Try &#x27;rm --help&#x27; for more information.</span><br><span class="line">[root@study tmp]# rm ./-aaa-</span><br></pre></td></tr></table></figure>
+
+<p>这是移除的指令（remove），要注意的是，通常在Linux系统下，为了怕文件被 root 误杀，所以很多 distributions 都已经默认加入 -i 这个选项了！而如果要连目录下的东西都一起杀掉的话， 例如子目录里面还有子目录时，那就要使用 -r 这个选项了！不过，使用“ rm -r ”这个指令之前，请千万注意了，因为该目录或文件“肯定”会被 root 杀掉！因为系统不会再次询问你是否要砍掉呦！所以那是个超级严重的指令下达呦！ 得特别注意！不过，如果你确定该目录不要了，那么使用 rm -r 来循环杀掉是不错的方式！</p>
+<p>文件名最好不要使用 “-“ 号开头， 因为 “-“ 后面接的是选项，因此，单纯的使用“ rm -aaa- ”系统的指令就会误判。如果使用后面会谈到的正则表达式时，还是会出问题的！所以，只能用避过首位字符是 “-“ 的方法啦！ 就是加上本目录“ .&#x2F; ”即可！如果 man rm 的话，其实还有一种方法，那就是“ rm – -aaa- ”也可以</p>
+<ul>
+<li>mv （移动文件与目录，或更名）</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[root@study ~]# mv [-fiu] source destination</span><br><span class="line">[root@study ~]# mv [options] source1 source2 source3 .... directory</span><br><span class="line">选项与参数：</span><br><span class="line">-f  ：force 强制的意思，如果目标文件已经存在，不会询问而直接覆盖；</span><br><span class="line">-i  ：若目标文件 （destination） 已经存在时，就会询问是否覆盖！</span><br><span class="line">-u  ：若目标文件已经存在，且 source 比较新，才会更新 （update）</span><br><span class="line"></span><br><span class="line">范例一：复制一文件，创建一目录，将文件移动到目录中</span><br><span class="line">[root@study ~]# cd /tmp</span><br><span class="line">[root@study tmp]# cp ~/.bashrc bashrc</span><br><span class="line">[root@study tmp]# mkdir mvtest</span><br><span class="line">[root@study tmp]# mv bashrc mvtest</span><br><span class="line"><span class="meta"># </span><span class="language-bash">将某个文件移动到某个目录去，就是这样做！</span></span><br><span class="line"></span><br><span class="line">范例二：将刚刚的目录名称更名为 mvtest2</span><br><span class="line">[root@study tmp]# mv mvtest mvtest2 &amp;lt;== 这样就更名了！简单～</span><br><span class="line"><span class="meta"># </span><span class="language-bash">其实在 Linux 下面还有个有趣的指令，名称为 rename ，</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">该指令专职进行多个文件名的同时更名，并非针对单一文件名变更，与<span class="built_in">mv</span>不同。请man rename。</span></span><br><span class="line"></span><br><span class="line">范例三：再创建两个文件，再全部移动到 /tmp/mvtest2 当中</span><br><span class="line">[root@study tmp]# cp ~/.bashrc bashrc1</span><br><span class="line">[root@study tmp]# cp ~/.bashrc bashrc2</span><br><span class="line">[root@study tmp]# mv bashrc1 bashrc2 mvtest2</span><br><span class="line"><span class="meta"># </span><span class="language-bash">注意到这边，如果有多个来源文件或目录，则最后一个目标文件一定是“目录！”</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">意思是说，将所有的数据移动到该目录的意思！</span></span><br></pre></td></tr></table></figure>
+
+<p>这是搬移 （move） 的意思！当你要移动文件或目录的时后，呵呵！这个指令就很重要啦！ 同样的，你也可以使用 -u （ update ）来测试新旧文件，看看是否需要搬移啰！ 另外一个用途就是“变更文件名！”，我们可以很轻易的使用 mv 来变更一个文件的文件名呢！不过，在 Linux 才有的指令当中，有个 rename ， 可以用来更改大量文件的文件名，你可以利用 man rename 来查阅一下。</p>
+<h3 id="取得路径的文件名称与目录名称"><a href="#取得路径的文件名称与目录名称" class="headerlink" title="取得路径的文件名称与目录名称"></a>取得路径的文件名称与目录名称</h3><p>每个文件的完整文件名包含了前面的目录与最终的文件名，而每个文件名的长度都可以到达 255 个字符耶！ 那么你怎么知道那个是文件名？那个是目录名？嘿嘿！就是利用斜线 （&#x2F;） 来分辨啊！ 其实，取得文件名或者是目录名称，一般的用途应该是在写程序的时候用来判断之用的啦～ 所以，这部分的指令可以用在第三篇内的 shell scripts 里头喔！ 下面我们简单的以几个范例来谈一谈 basename 与 dirname 的用途！</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@study ~]# basename /etc/sysconfig/network</span><br><span class="line">network         &amp;lt;== 很简单！就取得最后的文件名～</span><br><span class="line">[root@study ~]# dirname /etc/sysconfig/network</span><br><span class="line">/etc/sysconfig  &amp;lt;== 取得的变成目录名了！</span><br></pre></td></tr></table></figure>
+
+<h2 id="文件内容查阅"><a href="#文件内容查阅" class="headerlink" title="文件内容查阅"></a>文件内容查阅</h2><p>如果我们要查阅一个文件的内容时，该如何是好呢？这里有相当多有趣的指令可以来分享一下： 最常使用的显示文件内容的指令可以说是 cat 与 more 及 less 了！此外，如果我们要查看一个很大型的文件 （好几百MB时），但是我们只需要后端的几行字而已，那么该如何是好？呵呵！用 tail 呀，此外， tac 这个指令也可以达到这个目的喔！好了，说说各个指令的用途吧！</p>
+<ul>
+<li>cat 由第一行开始显示文件内容</li>
+<li>tac 从最后一行开始显示，可以看出 tac 是 cat 的倒着写！</li>
+<li>nl 显示的时候，顺道输出行号！</li>
+<li>more 一页一页的显示文件内容</li>
+<li>less 与 more 类似，但是比 more 更好的是，他可以往前翻页！</li>
+<li>head 只看头几行</li>
+<li>tail 只看尾巴几行</li>
+<li>od 以二进制的方式读取文件内容！</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">[root@study ~]# cat [-AbEnTv]</span><br><span class="line">选项与参数：</span><br><span class="line">-A  ：相当于 -vET 的整合选项，可列出一些特殊字符而不是空白而已；</span><br><span class="line">-b  ：列出行号，仅针对非空白行做行号显示，空白行不标行号！</span><br><span class="line">-E  ：将结尾的断行字符 $ 显示出来；</span><br><span class="line">-n  ：打印出行号，连同空白行也会有行号，与 -b 的选项不同；</span><br><span class="line">-T  ：将 [tab] 按键以 ^I 显示出来；</span><br><span class="line">-v  ：列出一些看不出来的特殊字符</span><br><span class="line"></span><br><span class="line">范例一：检阅 /etc/issue 这个文件的内容</span><br><span class="line">[root@study ~]# cat /etc/issue</span><br><span class="line">\S</span><br><span class="line">Kernel \r on an \m</span><br><span class="line"></span><br><span class="line">范例二：承上题，如果还要加印行号呢？</span><br><span class="line">[root@study ~]# cat -n /etc/issue</span><br><span class="line">     1  \S</span><br><span class="line">     2  Kernel \r on an \m</span><br><span class="line">     3</span><br><span class="line"><span class="meta"># </span><span class="language-bash">所以这个文件有三行！看到了吧！可以印出行号呢！这对于大文件要找某个特定的行时，有点用处！</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">如果不想要编排空白行的行号，可以使用“<span class="built_in">cat</span> -b /etc/issue”，自己测试看看：</span></span><br><span class="line"></span><br><span class="line">范例三：将 /etc/man_db.conf 的内容完整的显示出来（包含特殊字符）</span><br><span class="line">[root@study ~]# cat -A /etc/man_db.conf</span><br><span class="line"><span class="meta"># </span><span class="language-bash">$</span></span><br><span class="line">....（中间省略）....</span><br><span class="line">MANPATH_MAP^I/bin^I^I^I/usr/share/man$</span><br><span class="line">MANPATH_MAP^I/usr/bin^I^I/usr/share/man$</span><br><span class="line">MANPATH_MAP^I/sbin^I^I^I/usr/share/man$</span><br><span class="line">MANPATH_MAP^I/usr/sbin^I^I/usr/share/man$</span><br><span class="line">.....（下面省略）.....</span><br><span class="line"><span class="meta"># </span><span class="language-bash">上面的结果限于篇幅，鸟哥删除掉很多数据了。另外，输出的结果并不会有特殊字体，</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">鸟哥上面的特殊字体是要让您发现差异点在哪里就是了。基本上，在一般的环境中，</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">使用 [tab] 与空白键的效果差不多，都是一堆空白啊！我们无法知道两者的差别。</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">此时使用 <span class="built_in">cat</span> -A 就能够发现那些空白的地方是啥鬼东西了！[tab]会以 ^I 表示，</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">断行字符则是以 $ 表示，所以你可以发现每一行后面都是 $ 啊！不过断行字符</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">在Windows/Linux则不太相同，Windows的断行字符是 ^M$ 啰。</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">这部分我们会在[第九章 vim 软件](../Text/index.html<span class="comment">#tips_dos)的介绍时，再次的说明到喔！</span></span></span><br></pre></td></tr></table></figure>
+
+<p> cat 是 Concatenate （连续） 的简写， 主要的功能是将一个文件的内容连续的印出在屏幕上面！例如上面的例子中，我们将 &#x2F;etc&#x2F;issue 印出来！如果加上 -n 或 -b 的话，则每一行前面还会加上行号。</p>
+<ul>
+<li>tac （反向列示）</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@study ~]# tac /etc/issue</span><br><span class="line"></span><br><span class="line">Kernel \r on an \m</span><br><span class="line">\S</span><br><span class="line"># 嘿嘿！与刚刚上面的范例一比较，是由最后一行先显示喔！</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>nl （添加行号打印）</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">[root@study ~]# nl [-bnw] 文件</span><br><span class="line">选项与参数：</span><br><span class="line">-b  ：指定行号指定的方式，主要有两种：</span><br><span class="line">      -b a ：表示不论是否为空行，也同样列出行号（类似 cat -n）；</span><br><span class="line">      -b t ：如果有空行，空的那一行不要列出行号（默认值）；</span><br><span class="line">-n  ：列出行号表示的方法，主要有三种：</span><br><span class="line">      -n ln ：行号在屏幕的最左方显示；</span><br><span class="line">      -n rn ：行号在自己字段的最右方显示，且不加 0 ；</span><br><span class="line">      -n rz ：行号在自己字段的最右方显示，且加 0 ；</span><br><span class="line">-w  ：行号字段的占用的字符数。</span><br><span class="line"></span><br><span class="line">范例一：用 nl 列出 /etc/issue 的内容</span><br><span class="line">[root@study ~]# nl /etc/issue</span><br><span class="line">     1  \S</span><br><span class="line">     2  Kernel \r on an \m</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">注意看，这个文件其实有三行，第三行为空白（没有任何字符），</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">因为他是空白行，所以 <span class="built_in">nl</span> 不会加上行号喔！如果确定要加上行号，可以这样做：</span></span><br><span class="line"></span><br><span class="line">[root@study ~]# nl -b a /etc/issue</span><br><span class="line">     1  \S</span><br><span class="line">     2  Kernel \r on an \m</span><br><span class="line">     3</span><br><span class="line"><span class="meta"># </span><span class="language-bash">呵呵！行号加上来啰～那么如果要让行号前面自动补上 0 呢？可这样</span></span><br><span class="line"></span><br><span class="line">[root@study ~]# nl -b a -n rz /etc/issue</span><br><span class="line">000001  \S</span><br><span class="line">000002  Kernel \r on an \m</span><br><span class="line">000003</span><br><span class="line"><span class="meta"># </span><span class="language-bash">嘿嘿！自动在自己字段的地方补上 0 了～默认字段是六位数，如果想要改成 3 位数？</span></span><br><span class="line"></span><br><span class="line">[root@study ~]# nl -b a -n rz -w 3 /etc/issue</span><br><span class="line">001     \S</span><br><span class="line">002     Kernel \r on an \m</span><br><span class="line">003</span><br><span class="line"><span class="meta"># </span><span class="language-bash">变成仅有 3 位数啰～</span></span><br></pre></td></tr></table></figure>
+
+<p>nl 可以将输出的文件内容自动的加上行号！其默认的结果与 cat -n 有点不太一样， nl 可以将行号做比较多的显示设计，包括位数与是否自动补齐 0 等等的功能呢。</p>
+<h3 id="可翻页检视"><a href="#可翻页检视" class="headerlink" title="可翻页检视"></a>可翻页检视</h3><p>前面提到的 nl 与 cat, tac 等等，都是一次性的将数据一口气显示到屏幕上面，那有没有可以进行一页一页翻动的指令啊？ 让我们可以一页一页的观察，才不会前面的数据看不到啊～呵呵！有的！那就是 more 与 less 啰～</p>
+<ul>
+<li>more （一页一页翻动）</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@study ~]# more /etc/man_db.conf</span><br><span class="line"><span class="meta">#</span><span class="language-bash"></span></span><br><span class="line"><span class="language-bash"><span class="comment">#</span></span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">This file is used by the man-db package to configure the man and <span class="built_in">cat</span> paths.</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">It is also used to provide a manpath <span class="keyword">for</span> those without one by examining</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">their PATH environment variable. For details see the manpath（5） man page.</span></span><br><span class="line"><span class="meta">#</span><span class="language-bash"></span></span><br><span class="line"><span class="language-bash">.....（中间省略）.....</span></span><br><span class="line">--More--（28%）  &amp;lt;== 重点在这一行喔！你的光标也会在这里等待你的指令</span><br></pre></td></tr></table></figure>
+
+<p>仔细的给他看到上面的范例，如果 more 后面接的文件内容行数大于屏幕输出的行数时， 就会出现类似上面的图示。重点在最后一行，最后一行会显示出目前显示的百分比， 而且还可以在最后一行输入一些有用的指令喔！在 more 这个程序的运行过程中，你有几个按键可以按的：</p>
+<ul>
+<li>空白键 （space）：代表向下翻一页；</li>
+<li>Enter ：代表向下翻“一行”；</li>
+<li>&#x2F;字串 ：代表在这个显示的内容当中，向下搜寻“字串”这个关键字；</li>
+<li>:f ：立刻显示出文件名以及目前显示的行数；</li>
+<li>q ：代表立刻离开 more ，不再显示该文件内容。</li>
+<li>b 或 [ctrl]-b ：代表往回翻页，不过这动作只对文件有用，对管线无用。</li>
+</ul>
+<p>要离开 more 这个指令的显示工作，可以按下 q 就能够离开了。而要向下翻页，就使用空白键即可。 比较有用的是搜寻字串的功能，举例来说，我们使用“ more &#x2F;etc&#x2F;man_db.conf ”来观察该文件， 若想要在该文件内搜寻 MANPATH 这个字串时，可以这样做：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@study ~]# more /etc/man_db.conf</span><br><span class="line"><span class="meta">#</span><span class="language-bash"></span></span><br><span class="line"><span class="language-bash"><span class="comment">#</span></span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">This file is used by the man-db package to configure the man and <span class="built_in">cat</span> paths.</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">It is also used to provide a manpath <span class="keyword">for</span> those without one by examining</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">their PATH environment variable. For details see the manpath（5） man page.</span></span><br><span class="line"><span class="meta">#</span><span class="language-bash"></span></span><br><span class="line"><span class="language-bash">....（中间省略）....</span></span><br><span class="line">/MANPATH   &amp;lt;== 输入了 / 之后，光标就会自动跑到最下面一行等待输入！</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://oushaohua.github.io/2022/06/15/%E6%B5%8B%E8%AF%95%E7%B1%BB%E5%9E%8B%E5%92%8C%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1837,7 +2359,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
