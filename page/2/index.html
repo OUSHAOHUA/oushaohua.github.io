@@ -145,6 +145,220 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://oushaohua.github.io/2022/06/07/%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90%E6%A3%80%E6%B5%8B%E5%B7%A5%E5%85%B7%E5%8F%8A%E8%A7%84%E5%88%99/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaoou">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaoou">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/06/07/%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90%E6%A3%80%E6%B5%8B%E5%B7%A5%E5%85%B7%E5%8F%8A%E8%A7%84%E5%88%99/" class="post-title-link" itemprop="url">静态分析检测工具及规则</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-06-07 22:04:12" itemprop="dateCreated datePublished" datetime="2022-06-07T22:04:12+08:00">2022-06-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-06-14 23:02:20" itemprop="dateModified" datetime="2022-06-14T23:02:20+08:00">2022-06-14</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="静态分析检查工具"><a href="#静态分析检查工具" class="headerlink" title="静态分析检查工具"></a>静态分析检查工具</h2><h3 id="DeepSource"><a href="#DeepSource" class="headerlink" title="DeepSource"></a>DeepSource</h3><p>DeepSource可以帮你在代码评审期间自动发现并修复代码中的问题。它可以与 Bitbucket、GitHub 或 GitLab 帐户集成。这个工具可以找出反模式、bug 风险、性能问题。DeepSource 还会生成并跟踪各种指标（例如依赖项计数、文档覆盖率等）。分析器先发现文件级别的问题 (如在特定位置发现反模式)，并进一步发现代码库级别的问题 (如发现有些依赖项没有安装)。DeepSource Autofix 会为检测到的问题提出修复建议，并创建一个修复的拉取请求。<br><strong>关键特性</strong></p>
+<ul>
+<li>单个文件配置</li>
+<li>对拉取请求进行质量检查；问题频谱；</li>
+<li>单个文件配置；</li>
+<li>对拉取请求进行质量检查；问题频谱；</li>
+<li>维护活跃度分析器；</li>
+<li>可以详细了解每一个问题；</li>
+<li>跟踪代码指标；</li>
+<li>定制分析，可以忽略掉一些问题；</li>
+<li>分析器可以为经常发生的问题提出修复建议，如果允许的话，它们还可以创建修复过的拉取请求；</li>
+<li>对每个代码提交和拉取请求进行 Black、YAPF、Go fmt 等代码格式化。不需要进行 CI 设置。</li>
+</ul>
+<p><strong>支持的语言</strong>  </p>
+<p>Python、JavaScript、Go、Ruby、Java、Docker、SQL、Terraform、Shell，以及 TestIdentify 和修复 bug 风险、提交代码中的反模式、性能问题和安全缺陷。</p>
+<h3 id="SonarQube"><a href="#SonarQube" class="headerlink" title="SonarQube"></a>SonarQube</h3><p>SonarQube 是一种很流行的静态分析工具，用于持续检查代码库的代码质量和安全性，并在代码评审期间指导开发团队。SonarQube可与CI&#x2F;CD集成，进行自动化代码检查。它还提供了质量管理工具帮你主动纠正错误：IDE 集成、Jenkins 集成和代码评审工具。  </p>
+<p><strong>关键特性</strong></p>
+<ul>
+<li>多语言支持；</li>
+<li>安全性分析；</li>
+<li>发布质量代码；</li>
+<li>可维护性；</li>
+<li>可以识别蹊跷的问题。</li>
+</ul>
+<p><strong>缺点</strong> </p>
+<ul>
+<li>并不是每个 IDE 都支持 SonarQube；</li>
+<li>不能选择忽略团队不需要去修复的问题。</li>
+</ul>
+<p><strong>支持的语言</strong><br>25 种以上的编程语言，包括 Java、C#、JavaScript、TypeScript、C&#x2F;C++、COBOL 及其他</p>
+<h3 id="Codacy"><a href="#Codacy" class="headerlink" title="Codacy"></a>Codacy</h3><p>Codacy是一个静态分析工具，可以帮助开发人员处理技术债务并提高代码质量。Codacy 监控每一次代码提交和 PR 的代码质量。你可以用它来加强代码质量标准，加强安全实践，并节省代码评审时间。  </p>
+<p><strong>关键特性</strong></p>
+<ul>
+<li>代码评审自动化；</li>
+<li>代码质量分析；</li>
+<li>安全代码分析；</li>
+<li>集群安装 &#x2F; 多个实例。</li>
+</ul>
+<p><strong>缺点</strong></p>
+<ul>
+<li>缺乏与其他 SaaS 服务集成 (Sonatype、Blackduck、AWS API 网关的 API QOS 指标或 UI&#x2F;E2E SaaS 测试服务) 的能力；</li>
+<li>无法加密项目信息或限制对源代码的访问；</li>
+<li>社区相对较小。</li>
+</ul>
+<p><strong>支持的语言</strong>  </p>
+<p>30 多种语言，包括 Elixir、Go、Java、JavaScript、JSON、Kotlin、Python、Ruby、Scala、Swift、TypeScript 等等。</p>
+<h3 id="Embold"><a href="#Embold" class="headerlink" title="Embold"></a>Embold</h3><p>Embold 是一个通用的静态分析器，可以帮助开发人员在关键代码问题成为障碍之前把它们找出来。它是一个有效诊断、转换和维护应用程序的得力工具。它集成了人工智能和机器学习技术，可以找出一级问题，提供最佳解决方案，并在必要时重构应用程序。你可以在已有的 DevOps 技术栈中使用它，可以在内部使用，也可以在私有云和公共云中使用它。  </p>
+<p><strong>关键特性</strong></p>
+<ul>
+<li>直观的 UI；</li>
+<li>更深入和更快的代码检查；</li>
+<li>智能地提高性能；</li>
+<li>无缝集成。</li>
+</ul>
+<p><strong>支持的语言</strong>  </p>
+<p>Java、C、C++、C#、Objective-C、TypeScript、JavaScript、Python、PHP、Go、Kotlin、Solidity、SQL。</p>
+<h3 id="Veracode"><a href="#Veracode" class="headerlink" title="Veracode"></a>Veracode</h3><p>Veracode是一种流行的静态代码分析工具。它只针对安全问题，跨管道执行代码检查，以便发现安全漏洞，并将IDE扫描、管道扫描和策略扫描作为其服务的一部分。它会创建用于审计的代码评估，作为程序的一部分。<br><strong>关键特性</strong>  </p>
+<ul>
+<li>编码时的安全性问题反馈；</li>
+<li>在管道中快速获得结果；</li>
+<li>令人满意的审计能力；</li>
+<li>不需要调整就可以获得高精确度；</li>
+<li>专注于修复问题。</li>
+</ul>
+<p><strong>缺点</strong>  </p>
+<ul>
+<li>不支持自定义扫描规则；</li>
+<li>用户体验不是很好。</li>
+</ul>
+<p><strong>支持的语言</strong><br>Java、.Net、JavaScript、Scala、Python、PHP、Ruby on Rails、ColdFusion、Swift、C&#x2F;C++、COBOL、Visual Basic 6、RPG，等等。  </p>
+<p><strong>Reshift</strong><br>Reshift 是一个基于 SaaS 的软件平台，它无缝地集成到软件开发工作流中，让企业可以持续地部署安全的软件产品，而不会减慢它们的速度。Reshift 减少了查找和修复漏洞、识别数据泄露的潜在风险以及帮助软件公司实现合规性和法规要求的成本和时间。  </p>
+<p><strong>关键特性</strong>  </p>
+<ul>
+<li>快速配置；</li>
+<li>安全性扫描；</li>
+<li>安全性职责。</li>
+</ul>
+<p><strong>支持的语言</strong>  </p>
+<p>Java</p>
+<h2 id="静态分析检查规则"><a href="#静态分析检查规则" class="headerlink" title="静态分析检查规则"></a>静态分析检查规则</h2><h3 id="数据引用错误"><a href="#数据引用错误" class="headerlink" title="数据引用错误"></a>数据引用错误</h3><ul>
+<li>1.是否有引用的遍历未赋值或未初始化？在引用每个数据项（如变量、数组元素、结构中的域）时，因试图非正式地证明该数据在当前位置有确定的值。</li>
+<li>2.对于所有的数组引用，是否每个下标的值都在相应维规定的界限之内？</li>
+<li>3.对于所有的数组引用，是否每一个下标的值都是整数？</li>
+<li>4.对于所有的通过指针或引用变量的引用，当前引用的内存单元是否分配？这是所谓的“虚引用”错误。当指针的生命期大于所引用内存单元的生命期时，错误就会发生。当指针的生命期大于所引用内存单元的生命期时，错误就会发生。所以应试图非正式地“证明”，对于每个使用指针值的引用，引用的内存单元都存在。</li>
+<li>5.如果一个内存区域具有不同属性的别名，当通过别名进行引用时，内存区域中的数据值是否具有正确的属性?</li>
+<li>6.变量值的类型或属性是否与编译器所预期的一致？</li>
+<li>7.在使用的计算机上，当内存分配的单元小于内存可寻址的单元大小时，是否存在直接或间接的寻址错误？例如位串，定长的位串不必以字节边界为单位，但是地址又是指向直接边界的。如果程序计算一个位串的地址，稍后又通过该地址引用这个位串，可能会指向错误的内存位置。</li>
+<li>8.当使用指针或引用变量时，被引用的内存的属性是否与编译器所预期的一致？</li>
+<li>9.假如一个数据结构在多个过程或子程序中被引用，那么每个过程或子程序对该结构的定义是否相同？</li>
+<li>10.如果字符串有索引，当对数组进行索引操作或下标引用，字符串的边界取值是否有“仅差一个”的错误？</li>
+<li>11.对于所有面向对象的语言，是否所有的继承需求都在类中得到了满足？<h3 id="数据声明错误"><a href="#数据声明错误" class="headerlink" title="数据声明错误"></a>数据声明错误</h3></li>
+<li>1.是否所有的变量都进行了明确的声明？</li>
+<li>2.如果变量所有的属性在声明中没有明确说明，那么默认的属性能否被正确理解？</li>
+<li>3.如果变量在声明语句中被初始化，那么它的初始化是否正确？</li>
+<li>4.是否每个变量都被赋予了正确的长度和数据类型？</li>
+<li>5.变量的初始化是否与其存储空间的类型一致？</li>
+<li>6.是否存在相似名称的变量？容易发生混淆。<h3 id="运算错误"><a href="#运算错误" class="headerlink" title="运算错误"></a>运算错误</h3></li>
+<li>1.是否存在不一致的数据类型的变量间运算？</li>
+<li>2.是否有混合模式的运算？</li>
+<li>3.是否有相同数据欸写、不同字长变量间的运算？</li>
+<li>4.赋值语句的目标变量的数据类型是否小于右边表达式的数据类型或结果？</li>
+<li>5.在表达式的运算中是否存在表达式向上或向下溢出的情况？</li>
+<li>6.除法运算中的除数是否可能为0？</li>
+<li>7.如果计算机表达变量的基本方式是基于二进制的，那么运算结构是否不精确？</li>
+<li>8.在特定场合，变量的值是否超出了有意义的范围？</li>
+<li>9.对于包含一个以上操作符的表达式，赋值的顺序和操作符的优先顺序是否正确？</li>
+<li>10.整数的运算是否有使用不当的情况，尤其是除法。<h3 id="比较错误"><a href="#比较错误" class="headerlink" title="比较错误"></a>比较错误</h3></li>
+<li>1.是否有不同数据类型的变量之间的比较运算，例如，将字符串与地址、日期或数字相比较？</li>
+<li>2.是否有混合模式的比较运算，或不同长度的变量间的比较运算？如果有，应确保程序能正确理解转换规则。</li>
+<li>3.比较运算符是否正确？</li>
+<li>4.每个布尔表达式所叙述的内容是否都正确？</li>
+<li>5.布尔运算发的操作数是否是布尔类型的？比较运算符和布尔运算符是否错误的混在了一起？</li>
+<li>6.在二进制的计算机上，是否有用二进制表示的小数或浮点数的比较运算？</li>
+<li>7.对于那些包含一个以上的布尔运算符的表达式，赋值顺序以及运算符的优先顺序是否正确？</li>
+<li>8.编译器计算布尔表达式的方式是否会对程序产生影响？<h3 id="控制流程错误"><a href="#控制流程错误" class="headerlink" title="控制流程错误"></a>控制流程错误</h3></li>
+<li>1.如果程序包含多条分支路径，比如有计算GO TO语句，索引变量的值是否会大于可能的分支数量？</li>
+<li>2.是否所有的循环都终止了？</li>
+<li>3.程序、模块或子程序是否最终都终止了？</li>
+<li>4.由于实际情况没有满足循环的入口条件，循环体是否有可能从未执行过？</li>
+<li>5.如果循环同时由迭代变量和一个布尔条件所控制，如果循环月结了，后果会如何？</li>
+<li>6.是否存在“仅差一个”的错误，如迭代数量恰恰多一次或少一次？</li>
+<li>7.如果编程语言中有语句组或代码块的概念，是否每一组语句都有一个明确的while语句，并且do语句也与其相应的语句组对应？或者，是否每个左括号都有对应的右括号？</li>
+<li>8.是否存在不能穷尽的判断？举例来说，如果一个输入参数的预期值是1，2或3，单参数值不为1或2时，在逻辑上是否假设了参数必定为3?<h3 id="接口错误"><a href="#接口错误" class="headerlink" title="接口错误"></a>接口错误</h3></li>
+<li>1.被调用模块接收到的形参数量是否等于调用模块发送的实参数量？顺序是否准确？</li>
+<li>2.实参的属性是否与相应的形参的属性相匹配？</li>
+<li>3.实参的量纲是否与对应形参的量纲相匹配？举例来说，是否形参以度为单位而实参以弧度为单位？</li>
+<li>4.此模块传递给彼模块的实参数量，是否等于彼模块期望的形参数量？</li>
+<li>5.此模块传递给彼模块的实参属性，是否与彼模块相应形参的属性相匹配？</li>
+<li>6.此模块传递给彼模块的实参量纲，是否与彼模块相应形参的量纲相匹配？</li>
+<li>7.如果调用了内置函数，实参的数量、属性、顺序是否正确？</li>
+<li>8.如果某个模块或类有多个入口点，是否引用了与当前入口点无关的形参？</li>
+<li>9.是否有子程序改变了某个原本仅为输入值的形参？</li>
+<li>10.如果存在全局变量，在所有引用它们的模块中，它们的定义和属性是否相同？</li>
+<li>11.常数是否以实参形式传递过？<h3 id="输入、输出错误"><a href="#输入、输出错误" class="headerlink" title="输入、输出错误"></a>输入、输出错误</h3></li>
+<li>1.如果对文件明确声明过，其属性是否正确？</li>
+<li>2.打开文件的语句中各项属性的设置是否正确？</li>
+<li>3.格式规范是否与I&#x2F;O语句中的信息相吻合？</li>
+<li>4.是否有足够的可用空间，来保留程序将读取的文件？</li>
+<li>5.是否所有的文件在使用之前都打开了？</li>
+<li>6.是否所有的文件在使用完毕之后都关闭了？</li>
+<li>7.是否判断文件结束的条件，并正确处理？</li>
+<li>8.对I&#x2F;O出错的情况处理是否正确？</li>
+<li>9.任何打印或显示的文本信息中是否存在拼写或语法错误？</li>
+<li>10.程序是否正确处理了类似于“File Not Found”这样的错误？<h3 id="其他检查"><a href="#其他检查" class="headerlink" title="其他检查"></a>其他检查</h3></li>
+<li>1.如果编译器建立了一个标识符交叉引用列表，那么对该列表进行检查，查看是否有变量从未引用过，或仅被引用过一次。</li>
+<li>2.如果编译器建立了一个属性列表，那么对每个变量的属性进行检查，确保没有赋予过不希望的默认属性值。</li>
+<li>3.如果程序编译通过了，但计算机提供了一个或多个“警告”或“提示”信息，应对此逐一进行认真检查。</li>
+<li>4.程序或模块是否有足够的鲁棒性？即是否对其输入的合法性进行检查？</li>
+<li>5.程序是否遗漏了某个功能？</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://oushaohua.github.io/2022/06/06/%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E7%9A%84%E5%88%92%E5%88%86%E5%8F%8A%E7%BB%84%E7%BB%87%E5%BD%A2%E5%BC%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -832,7 +1046,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
